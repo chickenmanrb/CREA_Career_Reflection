@@ -142,6 +142,14 @@ export default function InterviewPage() {
     [currentStepId]
   );
 
+  // Progress: use prompt count (agents) instead of total steps to avoid confusion.
+  const promptSteps = useMemo(() => flowConfig.steps.filter((s) => s.type === "agent"), []);
+  const currentPromptNumber = useMemo(() => {
+    const match = currentStepId.match(/^q(\d)-/);
+    return match ? Number(match[1]) : null;
+  }, [currentStepId]);
+  const totalPrompts = promptSteps.length;
+
   const stepsForNav = useMemo(() => flowConfig.steps, []);
   const currentIdx = Math.max(0, stepsForNav.findIndex((s) => s.id === currentStepId));
   const goPrev = () => {
@@ -189,7 +197,11 @@ export default function InterviewPage() {
                   Previous
                 </button>
                 <span className="text-foreground font-semibold">
-                  Step {currentIdx + 1} of {stepsForNav.length}: {currentStep.title}
+                  {currentPromptNumber
+                    ? `Prompt ${currentPromptNumber} of ${totalPrompts}: ${currentStep.title}`
+                    : currentStep.id === "final-review"
+                      ? "Final Review"
+                      : currentStep.title}
                 </span>
                 <button
                   onClick={goNext}
