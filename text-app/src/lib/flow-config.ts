@@ -1,0 +1,174 @@
+import type { MultiAgentConfig } from "@/types/flow";
+import { DEFAULT_HARD_STOP_MS, DEFAULT_SOFT_WARNING_MS, DEFAULT_WRAP_LINE } from "@/lib/time-limit";
+
+// Flow for 6 questions (Intro + 6x(Prep/Agent/Review) + Final Review = 20 steps)
+export const flowConfig: MultiAgentConfig = {
+  steps: [
+    {
+      id: "intro",
+      type: "intro",
+      title: "Introduction and Instruction",
+      subtitle: "Meet Your AI Interview Coach",
+      description:
+        "Practice common interview questions in a realistic text simulation and receive detailed, personalized feedback on your written responses. This version uses text input instead of voice-to-voice conversation. The scoring mechanism evaluates your answers and provides specific guidance to strengthen your communication, technical knowledge, and overall approach.",
+      videoUrl: "",
+    },
+    // --- Question 1 ---
+    {
+      id: "q1-prep",
+      type: "question",
+      title: "1 - What Attracts You?",
+      description: "Question prep.",
+      questionText: "What attracts you to this pathway?",
+    },
+    {
+      id: "q1-agent",
+      type: "agent",
+      title: "Live Answer",
+      agentId: "agent_9301kb17m8qafjz81fzh3xed32gw",
+      description: "Live answer with Agent 1",
+      questionText: "What attracts you to this pathway?",
+      softWarningMs: DEFAULT_SOFT_WARNING_MS,
+      hardStopMs: DEFAULT_HARD_STOP_MS,
+      wrapUpLine: DEFAULT_WRAP_LINE,
+    },
+    {
+      id: "q1-review",
+      type: "review",
+      title: "Debrief",
+      description: "Scoring and review for Agent 1 conversation.",
+    },
+    // --- Question 2 ---
+    {
+      id: "q2-prep",
+      type: "question",
+      title: "2 - What Concerns You?",
+      description: "Question prep.",
+      questionText: "What concerns you about this pathway?",
+    },
+    {
+      id: "q2-agent",
+      type: "agent",
+      title: "Talk To Your AI Interview Coach",
+      agentId: "agent_3001kb17yts2ez6tmp7h6yczfeej",
+      description: "Live answer with Agent 2",
+      questionText: "What concerns you about this pathway?",
+      softWarningMs: DEFAULT_SOFT_WARNING_MS,
+      hardStopMs: DEFAULT_HARD_STOP_MS,
+      wrapUpLine: DEFAULT_WRAP_LINE,
+    },
+    {
+      id: "q2-review",
+      type: "review",
+      title: "Analyze Your Answer",
+      description: "Scoring and review for Agent 2 conversation.",
+    },
+    // --- Question 3 ---
+    {
+      id: "q3-prep",
+      type: "question",
+      title: "3 - What Questions/Curiosities Do You Have?",
+      description: "Prep content.",
+      questionText: "What questions and curiosities do you have?",
+    },
+    {
+      id: "q3-agent",
+      type: "agent",
+      title: "Talk To Your AI Interview Coach",
+      agentId: "agent_4101kb18epgrfpd8fthhywkwc5vh",
+      description: "Live answer with Agent 3",
+      questionText: "What questions and curiosities do you have?",
+      softWarningMs: DEFAULT_SOFT_WARNING_MS,
+      hardStopMs: DEFAULT_HARD_STOP_MS,
+      wrapUpLine: DEFAULT_WRAP_LINE,
+    },
+    {
+      id: "q3-review",
+      type: "review",
+      title: "Analyze Your Answer",
+      description: "Scoring and review for Agent 3 conversation.",
+    },
+    // --- Question 4 ---
+    {
+      id: "q4-prep",
+      type: "question",
+      title: "4 - Directly Applicable Skills",
+      description: "Prep content.",
+      questionText: "What skills or traits do you have that directly apply?",
+    },
+    {
+      id: "q4-agent",
+      type: "agent",
+      title: "Talk To Your AI Interview Coach",
+      agentId: "agent_2101kb18g7gtesyv4319ybbppf6y",
+      description: "Live answer with Agent 4",
+      questionText: "What skills or traits do you have that directly apply?",
+      softWarningMs: DEFAULT_SOFT_WARNING_MS,
+      hardStopMs: DEFAULT_HARD_STOP_MS,
+      wrapUpLine: DEFAULT_WRAP_LINE,
+    },
+    {
+      id: "q4-review",
+      type: "review",
+      title: "Analyze Your Answer",
+      description: "Scoring and review for Agent 4 conversation.",
+    },
+    // --- Question 5 ---
+    {
+      id: "q5-prep",
+      type: "question",
+      title: "5 - Areas for Improvement",
+      description: "Prep content.",
+      questionText: "What skills or traits do you need to improve on?",
+    },
+    {
+      id: "q5-agent",
+      type: "agent",
+      title: "Talk To Your AI Interview Coach",
+      agentId: "agent_4301kb18hc1mfvz9qwrw5k5acnry",
+      description: "Live answer with Agent 5",
+      questionText: "What skills or traits do you need to improve on?",
+      softWarningMs: DEFAULT_SOFT_WARNING_MS,
+      hardStopMs: DEFAULT_HARD_STOP_MS,
+      wrapUpLine: DEFAULT_WRAP_LINE,
+    },
+    {
+      id: "q5-review",
+      type: "review",
+      title: "Analyze Your Answer",
+      description: "Scoring and review for Agent 5 conversation.",
+    },
+    // --- Question 6 ---
+    {
+      id: "q6-prep",
+      type: "question",
+      title: "6 - Networking Strategy",
+      description: "Prep content.",
+      questionText: "Who can you connect with to learn about this path?",
+    },
+    {
+      id: "q6-agent",
+      type: "agent",
+      title: "Talk To Your AI Interview Coach",
+      agentId: "agent_7001kb18jpckevg876ah1m4472hc",
+      description: "Live answer with Agent 6",
+      questionText: "Who can you connect with to learn about this path?",
+      softWarningMs: DEFAULT_SOFT_WARNING_MS,
+      hardStopMs: DEFAULT_HARD_STOP_MS,
+      wrapUpLine: DEFAULT_WRAP_LINE,
+    },
+    {
+      id: "q6-review",
+      type: "review",
+      title: "Analyze Your Answer",
+      description: "Scoring and review for Agent 6 conversation.",
+    },
+    // --- Final Review ---
+    {
+      id: "final-review",
+      type: "review",
+      title: "7 - Review Interview Feedback",
+      description: "",
+    },
+  ],
+};
