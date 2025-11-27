@@ -175,6 +175,12 @@ export default function InterviewPage() {
               <p className="text-muted-foreground max-w-2xl text-sm">
                 Three steps to each prompt: 1) Prep 2) Write your answer 3) Scoring & Feedback.
               </p>
+              <div className="rounded-lg border bg-white px-4 py-3 text-sm shadow-sm">
+                <span className="font-semibold text-[#0f1729]">Workflow:</span>{" "}
+                <span className="font-semibold">1) Prep</span> →{" "}
+                <span className="font-semibold">2) Write</span> →{" "}
+                <span className="font-semibold">3) Score</span>. Keep answers concise, specific, and tied to the prompt.
+              </div>
             </div>
             <div className="flex items-center gap-3 text-xs text-muted-foreground">
               <div className="flex items-center gap-2">
@@ -186,7 +192,7 @@ export default function InterviewPage() {
                   Previous
                 </button>
                 <span className="text-foreground font-semibold">
-                  Step {currentIdx + 1} of {stepsForNav.length}
+                  Step {currentIdx + 1} of {stepsForNav.length}: {currentStep.title}
                 </span>
                 <button
                   onClick={goNext}

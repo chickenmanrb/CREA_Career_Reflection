@@ -221,38 +221,41 @@ export function StepRenderer({
   if (step.type === "agent") {
     return (
       <div className="space-y-4">
-        <div className="flex flex-col items-center justify-center gap-4">
-          <Button
-            variant="default"
-            className="rounded-full bg-[#05b6ff] px-6 py-3 text-sm font-semibold text-white shadow-md hover:bg-[#0aa3e2]"
-            onClick={handleStartOrEnd}
-          >
-            {isConnected ? "End Reflection" : "Begin Reflection"}
-          </Button>
-
-          <button
-            type="button"
-            onClick={resetConversation}
-            className="text-xs font-semibold text-slate-600 underline-offset-2 hover:underline disabled:opacity-60"
-            disabled={!isConnected && messages.length > 0}
-          >
-            Reset conversation
-          </button>
-          <p className="text-xs text-muted-foreground text-center md:text-left">
-            Write your answer, send it, and wait for a brief simulated follow-up from the AI. Click &quot;End Reflection&quot; when you are satisfied with your answer, then click &quot;Score transcript&quot; to get detailed feedback.
-          </p>
-        </div>
-
         <div className="flex flex-col gap-4">
           <div className="rounded-xl border bg-gradient-to-br from-slate-50 via-white to-slate-100 p-5 shadow-sm">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">AI prompt</p>
-            <p className="mt-2 text-lg font-semibold text-slate-900 leading-relaxed">
+            <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">
+              <span>AI Prompt</span>
+            </div>
+            <p className="mt-2 text-xl font-semibold text-slate-900 leading-relaxed">
               {latestAiMessage?.message ?? "Click Begin Reflection to get the first AI nudge."}
             </p>
             <div className="mt-1 flex items-center justify-between text-[11px] text-slate-500">
               {latestAiMessage?.timestamp ? <span>Last update: {latestAiMessage.timestamp}</span> : <span>&nbsp;</span>}
               {coachLoading ? <span>Thinking...</span> : null}
             </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <Button
+                variant="default"
+                className="rounded-full bg-[#05b6ff] px-5 py-2 text-sm font-semibold text-white shadow-md hover:bg-[#0aa3e2]"
+                onClick={handleStartOrEnd}
+              >
+                {isConnected ? "End Reflection" : "Start Your Response"}
+              </Button>
+              <button
+                type="button"
+                onClick={resetConversation}
+                className="text-xs font-semibold text-slate-600 underline-offset-2 hover:underline disabled:opacity-60"
+                disabled={!isConnected && messages.length > 0}
+              >
+                Reset
+              </button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Write, send, and get a tailored follow-up. When satisfied, score the transcript.
+            </p>
           </div>
 
           <div className="relative">
@@ -265,18 +268,18 @@ export function StepRenderer({
                   handleSendText(e);
                 }
               }}
-              placeholder={isConnected ? "Enter your reflection here..." : "Click 'Begin Reflection' to start..."}
-              className="min-h-[320px] resize-none pr-12 text-base"
+              placeholder={isConnected ? "Type your reflection here..." : "Click 'Start Your Response' to begin..."}
+              className="min-h-[340px] resize-none pr-24 text-base"
               disabled={!isConnected}
             />
             <Button
-              size="icon"
+              size="sm"
               variant="ghost"
               onClick={handleSendText}
               disabled={!textInput.trim() || !isConnected}
-              className="absolute right-3 bottom-3 h-8 w-8"
+              className="absolute right-3 bottom-3 h-9 px-3 text-sm font-semibold"
             >
-              <SendIcon className="h-4 w-4" />
+              <SendIcon className="h-4 w-4 mr-1" /> Send
             </Button>
           </div>
 
@@ -298,7 +301,7 @@ export function StepRenderer({
             </button>
             <button
               onClick={onScore}
-              className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+              className="rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow"
               disabled={loadingScore || messages.length === 0}
             >
               {loadingScore ? "Scoring..." : "Score transcript"}

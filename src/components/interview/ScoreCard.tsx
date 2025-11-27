@@ -46,7 +46,7 @@ export function ScoreCard({ score, loading, questionKey, showAll = true }: Score
       <Card className="border">
         <CardHeader>
           <CardTitle>No scores yet</CardTitle>
-          <CardDescription>Submit a transcript to see scores.</CardDescription>
+          <CardDescription>Score transcript to see AI feedback on clarity, relevance, and tone.</CardDescription>
         </CardHeader>
       </Card>
     );
