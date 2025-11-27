@@ -38,6 +38,10 @@ type ScoreResult = {
   rawText?: string;
 };
 
+// New table names to keep reflection data isolated from the voice interview app
+const SESSION_TABLE = "reflection_sessions";
+const SCORE_TABLE = "reflection_scores";
+
 async function analyzeWithOpenAI(
   transcript: TranscriptMessage[],
   summary: string | undefined,
@@ -217,10 +221,10 @@ export async function POST(request: Request) {
     try {
       const supabase = getSupabaseServiceClient();
 
-      // Upsert session
+      // Upsert session into reflection-specific table
       if (!sessionIdentifier) {
         const { data, error } = await supabase
-          .from("interview_sessions")
+          .from(SESSION_TABLE)
           .insert({
             agent_id: agentId ?? null,
             candidate_name: candidateName ?? null,
@@ -237,7 +241,7 @@ export async function POST(request: Request) {
         sessionIdentifier = data?.id ?? null;
       } else {
         await supabase
-          .from("interview_sessions")
+          .from(SESSION_TABLE)
           .update({
             transcript,
             agent_id: agentId ?? null,
@@ -249,7 +253,7 @@ export async function POST(request: Request) {
 
       if (sessionIdentifier) {
         const { error: scoreError } = await supabase
-          .from("interview_scores")
+          .from(SCORE_TABLE)
           .insert({
             session_id: sessionIdentifier,
             rubric_version: "cre-career-path-rubric-v1",

@@ -165,7 +165,7 @@ export function StepRenderer({
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "interview-report.csv");
+    link.setAttribute("download", "reflection-report.csv");
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -176,7 +176,7 @@ export function StepRenderer({
     return (
       <VideoFrame
         title="Why This Matters"
-        description="Practice common interview questions in a realistic text simulation and receive detailed, personalized feedback on your written responses. The scoring mechanism evaluates your answers and provides specific guidance to strengthen your communication, technical knowledge, and overall approach."
+        description="Clarify your fit and interests through six written prompts. You’ll get quick AI nudges plus structured feedback to spot strengths, gaps, and next actions."
       />
     );
   }
@@ -191,7 +191,7 @@ export function StepRenderer({
             className="rounded-full bg-[#05b6ff] px-6 py-3 text-white hover:bg-[#0aa3e2]"
             onClick={onAdvance}
           >
-            Ready To Answer
+            Ready To Reflect
           </Button>
         </div>
       </div>
@@ -203,16 +203,16 @@ export function StepRenderer({
       <div className="space-y-4">
         <div className="flex flex-col items-center justify-center gap-4">
           <div className="flex flex-col items-center gap-1 text-xs font-semibold text-slate-700">
-            <span className="rounded-full border px-3 py-1 border-slate-200 bg-white text-slate-700">Text-Only Interview Mode</span>
+            <span className="rounded-full border px-3 py-1 border-slate-200 bg-white text-slate-700">Text Reflection Mode</span>
           </div>
 
-          <div className="relative h-48 w-full rounded-xl border bg-white shadow-sm flex items-center justify-center">
+          <div className="relative h-40 w-full rounded-xl border bg-white shadow-sm flex items-center justify-center">
             <Button
               variant="default"
               className="rounded-full bg-[#05b6ff] px-6 py-3 text-sm font-semibold text-white shadow-md hover:bg-[#0aa3e2]"
               onClick={handleStartOrEnd}
             >
-              {isConnected ? "End Interview" : "Begin Interview"}
+              {isConnected ? "End Reflection" : "Begin Reflection"}
             </Button>
           </div>
 
@@ -225,11 +225,11 @@ export function StepRenderer({
             Reset conversation
           </button>
           <p className="text-xs text-muted-foreground text-center md:text-left">
-            Write your answer, send it, and wait for a brief simulated follow-up from the AI. Click &quot;End Interview&quot; when you are satisfied with your answer, then click &quot;Score transcript&quot; to get detailed feedback.
+            Write your answer, send it, and wait for a brief simulated follow-up from the AI. Click &quot;End Reflection&quot; when you are satisfied with your answer, then click &quot;Score transcript&quot; to get detailed feedback.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-[1.05fr_1.4fr]">
           <Transcript messages={messages} />
           <div className="flex flex-col gap-4">
             <div className="relative">
@@ -242,8 +242,8 @@ export function StepRenderer({
                     handleSendText(e);
                   }
                 }}
-                placeholder={isConnected ? "Enter your answer here..." : "Click 'Begin Interview' to start..."}
-                className="min-h-[120px] resize-none pr-12"
+                placeholder={isConnected ? "Enter your answer here..." : "Click 'Begin Reflection' to start..."}
+                className="min-h-[220px] resize-none pr-12 text-base"
                 disabled={!isConnected}
               />
               <Button
@@ -261,7 +261,7 @@ export function StepRenderer({
         </div>
         <div className="flex items-center justify-between gap-3">
           <div className="text-sm text-muted-foreground">
-            {status ?? "When you finish the interview, score the transcript."}
+            {status ?? "When you finish the reflection, score the transcript."}
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -311,9 +311,9 @@ export function StepRenderer({
                 <div>
                   <p className="font-medium text-foreground">General Scoring Guidance:</p>
                   <ul className="mt-1 list-disc space-y-1 pl-5">
-                    <li>Score below 6: Would likely not advance to the next round in most interview processes.</li>
-                    <li>Score 6–8: Falls within the range where advancement is possible depending on other factors.</li>
-                    <li>Score 8+: Would likely advance you forward in most interview processes.</li>
+                    <li>Score below 6: Needs meaningful refinement before sharing with mentors, managers, or recruiters.</li>
+                    <li>Score 6–8: Solid but could be sharper—tighten specifics and structure.</li>
+                    <li>Score 8+: Clear, specific, and well-aligned—strong for networking or applications.</li>
                   </ul>
                 </div>
                 <div>
@@ -322,7 +322,7 @@ export function StepRenderer({
                     <li>Role level: Analyst expectations differ from Associate or VP-level roles.</li>
                     <li>Market competitiveness: Top-tier institutional firms set a higher bar than regional owner-operators.</li>
                     <li>Firm priorities: Different teams weight technical skills, cultural fit, and competencies differently.</li>
-                    <li>Interview stage: Screening calls differ from final-round conversations with senior leadership.</li>
+                    <li>Conversation stage: Early networking chats differ from final-round interviews.</li>
                   </ul>
                 </div>
                 <div>
@@ -330,7 +330,7 @@ export function StepRenderer({
                   <ul className="mt-1 list-disc space-y-1 pl-5">
                     <li>Interview performance is cumulative; one weaker answer can be offset elsewhere.</li>
                     <li>Cultural fit and personality alignment matter beyond what scores capture.</li>
-                    <li>Use these scores as diagnostics to target improvements before real interviews.</li>
+                    <li>Use these scores as diagnostics to target improvements before real conversations.</li>
                     <li>Practice and iteration build momentum—multiple mock sessions surface performance patterns.</li>
                   </ul>
                 </div>

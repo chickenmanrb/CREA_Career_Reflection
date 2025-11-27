@@ -52,7 +52,7 @@ export const geminiPrompt = (transcript: TranscriptMessage[], summary?: string, 
     .join("\n");
 
   return `
-You are a job interview coach scoring a mock interview. Score *one question at a time* when a questionKey is provided. Only score the supplied question; leave all other questions at 0 with empty strengths/weaknesses.
+You are a career reflection coach scoring written answers. Score *one question at a time* when a questionKey is provided. Only score the supplied question; leave all other questions at 0 with empty strengths/weaknesses.
 
 When writing strengths or weaknesses, cite specific evidence from the candidate's answer. Pull in short quotes or paraphrased snippets from the transcript (e.g., "Mentioned cap rates tightening to 5.5%") so the candidate can see exactly what to repeat or fix.
 

@@ -10,7 +10,7 @@ export const flowConfig: MultiAgentConfig = {
       title: "Introduction and Instruction",
       subtitle: "Meet Your AI Interview Coach",
       description:
-        "Practice common interview questions in a realistic text simulation and receive detailed, personalized feedback on your written responses. This version uses text input instead of voice-to-voice conversation. The scoring mechanism evaluates your answers and provides specific guidance to strengthen your communication, technical knowledge, and overall approach.",
+        "Reflect on six career pathway prompts in a text-first experience. You'll write answers, get light AI follow-ups, and receive targeted feedback on clarity, specificity, and alignment with your goals.",
       videoUrl: "",
     },
     // --- Question 1 ---

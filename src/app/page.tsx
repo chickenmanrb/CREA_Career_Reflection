@@ -32,9 +32,9 @@ export default function Home() {
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-md">
         <div className="grid gap-6 md:grid-cols-[1.3fr_1fr]">
           <div className="space-y-3">
-            <h1 className="text-2xl font-semibold text-slate-900">Acquisitions Mock Interview</h1>
+            <h1 className="text-2xl font-semibold text-slate-900">Career Pathway Reflection</h1>
             <p className="text-slate-600 text-sm">
-              Practice common interview questions in a realistic simulation and receive detailed, personalized feedback on your responses. Our AI-powered coach evaluates your answers and provides specific guidance to strengthen your communication, technical knowledge, and overall approach for this career path.
+              Work through six reflection prompts and get tailored feedback on clarity, specificity, and alignment to your goals. The flow is fully text-based—write, get a brief AI follow-up, then score your responses to see strengths and gaps.
             </p>
             <div className="overflow-hidden rounded-2xl border bg-white shadow-sm">
               <div style={{ padding: "56.25% 0 0 0", position: "relative" }}>
@@ -54,12 +54,12 @@ export default function Home() {
             <div className="rounded-xl border bg-white p-4 shadow-sm">
               <h3 className="text-sm font-semibold text-slate-900">What to expect</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
-                4 questions, live voice agent, and an automated rubric score with follow-up review. Use this to warm up before real interviews.
+                6 prompts, text entry, light AI follow-ups, and an automated rubric with strengths/weaknesses. Use this to clarify your career story and next steps.
               </p>
             </div>
             <div className="rounded-xl border bg-white p-4 shadow-sm">
               <h3 className="text-sm font-semibold text-slate-900">Ready?</h3>
-              <p className="text-sm text-slate-600">Enter your info, then start your mock interview.</p>
+              <p className="text-sm text-slate-600">Enter your info, then start the reflection.</p>
               <form className="mt-3 space-y-3" onSubmit={handleStart}>
                 <div className="space-y-1">
                   <label className="text-xs font-semibold text-slate-700">Name</label>
@@ -91,7 +91,7 @@ export default function Home() {
                   className="w-full rounded-full bg-[#05b6ff] px-4 py-2 text-xs font-semibold text-white shadow hover:bg-[#0aa3e2] disabled:cursor-not-allowed disabled:opacity-50"
                   disabled={!canStart}
                 >
-                  Start interview
+                  Start reflection
                 </button>
               </form>
             </div>

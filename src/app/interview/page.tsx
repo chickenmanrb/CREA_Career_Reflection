@@ -173,7 +173,7 @@ export default function InterviewPage() {
             <div className="space-y-2">
               <h1 className="text-3xl font-semibold">Career Pathway Reflection</h1>
               <p className="text-muted-foreground max-w-2xl text-sm">
-                Three steps to each question: 1) Prep 2) Write your answer 3) Scoring & Feedback.
+                Three steps to each prompt: 1) Prep 2) Write your answer 3) Scoring & Feedback.
               </p>
             </div>
             <div className="flex items-center gap-3 text-xs text-muted-foreground">
