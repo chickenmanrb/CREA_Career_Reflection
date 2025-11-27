@@ -172,9 +172,6 @@ export default function InterviewPage() {
           <div className="mb-6 flex items-center justify-between gap-4">
             <div className="space-y-2">
               <h1 className="text-3xl font-semibold">Career Pathway Reflection</h1>
-              <p className="text-muted-foreground max-w-2xl text-sm">
-                Three steps to each prompt: 1) Prep 2) Write your answer 3) Scoring & Feedback.
-              </p>
               <div className="rounded-lg border bg-white px-4 py-3 text-sm shadow-sm">
                 <span className="font-semibold text-[#0f1729]">Workflow:</span>{" "}
                 <span className="font-semibold">1) Prep</span> →{" "}

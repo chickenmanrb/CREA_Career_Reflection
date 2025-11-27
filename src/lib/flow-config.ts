@@ -15,13 +15,6 @@ export const flowConfig: MultiAgentConfig = {
     },
     // --- Question 1 ---
     {
-      id: "q1-prep",
-      type: "question",
-      title: "1 - What Attracts You?",
-      description: "Question prep.",
-      questionText: "What attracts you to this pathway?",
-    },
-    {
       id: "q1-agent",
       type: "agent",
       title: "Live Answer",
@@ -40,16 +33,9 @@ export const flowConfig: MultiAgentConfig = {
     },
     // --- Question 2 ---
     {
-      id: "q2-prep",
-      type: "question",
-      title: "2 - What Concerns You?",
-      description: "Question prep.",
-      questionText: "What concerns you about this pathway?",
-    },
-    {
       id: "q2-agent",
       type: "agent",
-      title: "Talk To Your AI Interview Coach",
+      title: "Talk to your AI Career Coach",
       agentId: "agent_3001kb17yts2ez6tmp7h6yczfeej",
       description: "Live answer with Agent 2",
       questionText: "What concerns you about this pathway?",
@@ -65,16 +51,9 @@ export const flowConfig: MultiAgentConfig = {
     },
     // --- Question 3 ---
     {
-      id: "q3-prep",
-      type: "question",
-      title: "3 - What Questions/Curiosities Do You Have?",
-      description: "Prep content.",
-      questionText: "What questions and curiosities do you have?",
-    },
-    {
       id: "q3-agent",
       type: "agent",
-      title: "Talk To Your AI Interview Coach",
+      title: "Talk to your AI Career Coach",
       agentId: "agent_4101kb18epgrfpd8fthhywkwc5vh",
       description: "Live answer with Agent 3",
       questionText: "What questions and curiosities do you have?",
@@ -90,16 +69,9 @@ export const flowConfig: MultiAgentConfig = {
     },
     // --- Question 4 ---
     {
-      id: "q4-prep",
-      type: "question",
-      title: "4 - Directly Applicable Skills",
-      description: "Prep content.",
-      questionText: "What skills or traits do you have that directly apply?",
-    },
-    {
       id: "q4-agent",
       type: "agent",
-      title: "Talk To Your AI Interview Coach",
+      title: "Talk to your AI Career Coach",
       agentId: "agent_2101kb18g7gtesyv4319ybbppf6y",
       description: "Live answer with Agent 4",
       questionText: "What skills or traits do you have that directly apply?",
@@ -115,16 +87,9 @@ export const flowConfig: MultiAgentConfig = {
     },
     // --- Question 5 ---
     {
-      id: "q5-prep",
-      type: "question",
-      title: "5 - Areas for Improvement",
-      description: "Prep content.",
-      questionText: "What skills or traits do you need to improve on?",
-    },
-    {
       id: "q5-agent",
       type: "agent",
-      title: "Talk To Your AI Interview Coach",
+      title: "Talk to your AI Career Coach",
       agentId: "agent_4301kb18hc1mfvz9qwrw5k5acnry",
       description: "Live answer with Agent 5",
       questionText: "What skills or traits do you need to improve on?",
@@ -140,16 +105,9 @@ export const flowConfig: MultiAgentConfig = {
     },
     // --- Question 6 ---
     {
-      id: "q6-prep",
-      type: "question",
-      title: "6 - Networking Strategy",
-      description: "Prep content.",
-      questionText: "Who can you connect with to learn about this path?",
-    },
-    {
       id: "q6-agent",
       type: "agent",
-      title: "Talk To Your AI Interview Coach",
+      title: "Talk to your AI Career Coach",
       agentId: "agent_7001kb18jpckevg876ah1m4472hc",
       description: "Live answer with Agent 6",
       questionText: "Who can you connect with to learn about this path?",

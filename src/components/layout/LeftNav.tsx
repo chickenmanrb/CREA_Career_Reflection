@@ -48,7 +48,7 @@ function buildGroups(steps: FlowStep[]): NavGroup[] {
         steps: [step],
         startIdx: idx,
         endIdx: idx,
-        kind: step.type === "intro" ? "intro" : "question",
+        kind: key ? "question" : "intro",
       });
       return;
     }
@@ -56,7 +56,7 @@ function buildGroups(steps: FlowStep[]): NavGroup[] {
     if (!map.has(key)) {
       const group: NavGroup = {
         id: key,
-        title: step.title,
+        title: step.questionText ?? step.title,
         steps: [],
         startIdx: idx,
         endIdx: idx,
@@ -70,11 +70,6 @@ function buildGroups(steps: FlowStep[]): NavGroup[] {
     group.steps.push(step);
     group.startIdx = Math.min(group.startIdx, idx);
     group.endIdx = Math.max(group.endIdx, idx);
-
-    // Prefer the question title for the parent label if present.
-    if (step.type === "question") {
-      group.title = step.title;
-    }
   });
 
   return groups;
@@ -129,9 +124,9 @@ const ChildIcon = ({ type }: { type: FlowStep["type"] }) => {
 };
 
 function childLabel(type: FlowStep["type"]) {
-  if (type === "agent") return "Live Answer";
+  if (type === "agent") return "Career Reflection";
   if (type === "review") return "Debrief";
-  return "Question Prep";
+  return "Prompt";
 }
 
 export function LeftNav({ steps, currentId, onSelect }: LeftNavProps) {

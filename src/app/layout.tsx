@@ -13,28 +13,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CRE Analyst AI Mock Interview",
-  description:
-    "CRE Analyst Mock Interview Coach",
+  title: "Career Pathway Reflection",
+  description: "Write, refine, and score six prompts to clarify your career direction.",
   icons: {
     icon: "/assets/favicon.webp",
   },
   openGraph: {
-    title: "CRE Analyst AI Mock Interview",
-    description: "CRE Analyst Mock Interview Coach",
+    title: "Career Pathway Reflection",
+    description: "Write, refine, and score six prompts to clarify your career direction.",
     images: [
       {
         url: "/assets/CRE logo.webp",
         width: 800,
         height: 800,
-        alt: "CRE Analyst",
+        alt: "Career Pathway Reflection",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "CRE Analyst AI Mock Interview",
-    description: "CRE Analyst Mock Interview Coach",
+    title: "Career Pathway Reflection",
+    description: "Write, refine, and score six prompts to clarify your career direction.",
     images: ["/assets/CRE logo.webp"],
   },
 };
