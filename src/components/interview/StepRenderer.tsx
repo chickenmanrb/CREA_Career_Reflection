@@ -3,7 +3,6 @@
 import { useState, useRef, useCallback } from "react";
 import { SendIcon } from "lucide-react";
 
-import { Transcript } from "@/components/interview/Transcript";
 import { ScoreCard } from "@/components/interview/ScoreCard";
 import { VideoFrame } from "@/components/ui/video-frame";
 import { Button } from "@/components/ui/button";
@@ -55,15 +54,19 @@ type StepRendererProps = {
   provider: "openai" | "anthropic";
 };
 
-// Simple simulated AI follow-up to keep the text interaction feeling conversational.
-function simulateAgentResponse(userMessage: string, onMessage: StepRendererProps["onMessage"]) {
-  if (userMessage.length < 10) {
-    onMessage({ source: "ai", message: "That's a good start. Could you elaborate on that point?" });
-  } else if (userMessage.length < 50) {
-    onMessage({ source: "ai", message: "Thank you. Is there anything else you would like to add about that?" });
-  } else {
-    onMessage({ source: "ai", message: "Understood. That covers the core question well. Feel free to add more or move on." });
-  }
+async function fetchCoachReply(questionText: string | undefined, userMessage: string, agentId: string) {
+  const res = await fetch("/api/coach", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      questionText: questionText ?? "Reflection prompt",
+      userMessage,
+      agentId,
+    }),
+  });
+  if (!res.ok) throw new Error("coach_request_failed");
+  const data = await res.json();
+  return (data?.reply as string | undefined)?.trim();
 }
 
 export function StepRenderer({
@@ -86,6 +89,9 @@ export function StepRenderer({
   const [callState, setCallState] = useState<"disconnected" | "connected">("disconnected");
   const isConnected = callState === "connected";
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const aiMessages = messages.filter((msg) => msg.source === "ai" && msg.questionKey === questionKey);
+  const latestAiMessage = aiMessages[aiMessages.length - 1];
+  const [coachLoading, setCoachLoading] = useState(false);
 
   const startConversation = useCallback(() => {
     setCallState("connected");
@@ -100,7 +106,7 @@ export function StepRenderer({
   }, []);
 
   const handleSendText = useCallback(
-    (e?: React.FormEvent | React.KeyboardEvent) => {
+    async (e?: React.FormEvent | React.KeyboardEvent) => {
       if (e) e.preventDefault();
       const trimmedInput = textInput.trim();
       if (!trimmedInput) return;
@@ -108,9 +114,23 @@ export function StepRenderer({
       onMessage({ source: "user", message: trimmedInput });
       setTextInput("");
 
-      simulateAgentResponse(trimmedInput, onMessage);
+      const agentId = step.agentId ?? "";
+      try {
+        setCoachLoading(true);
+        const reply = await fetchCoachReply(step.questionText, trimmedInput, agentId);
+        if (reply) {
+          onMessage({ source: "ai", message: reply });
+        } else {
+          onMessage({ source: "ai", message: "Add one concrete example or detail to strengthen that point." });
+        }
+      } catch (err) {
+        console.warn("coach fallback", err);
+        onMessage({ source: "ai", message: "Give one specific example or add a next step to deepen this answer." });
+      } finally {
+        setCoachLoading(false);
+      }
     },
-    [textInput, onMessage]
+    [textInput, onMessage, step.agentId, step.questionText]
   );
 
   const handleStartOrEnd = useCallback(() => {
@@ -202,19 +222,13 @@ export function StepRenderer({
     return (
       <div className="space-y-4">
         <div className="flex flex-col items-center justify-center gap-4">
-          <div className="flex flex-col items-center gap-1 text-xs font-semibold text-slate-700">
-            <span className="rounded-full border px-3 py-1 border-slate-200 bg-white text-slate-700">Text Reflection Mode</span>
-          </div>
-
-          <div className="relative h-40 w-full rounded-xl border bg-white shadow-sm flex items-center justify-center">
-            <Button
-              variant="default"
-              className="rounded-full bg-[#05b6ff] px-6 py-3 text-sm font-semibold text-white shadow-md hover:bg-[#0aa3e2]"
-              onClick={handleStartOrEnd}
-            >
-              {isConnected ? "End Reflection" : "Begin Reflection"}
-            </Button>
-          </div>
+          <Button
+            variant="default"
+            className="rounded-full bg-[#05b6ff] px-6 py-3 text-sm font-semibold text-white shadow-md hover:bg-[#0aa3e2]"
+            onClick={handleStartOrEnd}
+          >
+            {isConnected ? "End Reflection" : "Begin Reflection"}
+          </Button>
 
           <button
             type="button"
@@ -229,51 +243,62 @@ export function StepRenderer({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-[1.05fr_1.4fr]">
-          <Transcript messages={messages} />
-          <div className="flex flex-col gap-4">
-            <div className="relative">
-              <Textarea
-                ref={textareaRef}
-                value={textInput}
-                onChange={(e) => setTextInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    handleSendText(e);
-                  }
-                }}
-                placeholder={isConnected ? "Enter your answer here..." : "Click 'Begin Reflection' to start..."}
-                className="min-h-[220px] resize-none pr-12 text-base"
-                disabled={!isConnected}
-              />
-              <Button
-                size="icon"
-                variant="ghost"
-                onClick={handleSendText}
-                disabled={!textInput.trim() || !isConnected}
-                className="absolute right-3 bottom-3 h-8 w-8"
-              >
-                <SendIcon className="h-4 w-4" />
-              </Button>
+        <div className="flex flex-col gap-4">
+          <div className="rounded-xl border bg-gradient-to-br from-slate-50 via-white to-slate-100 p-5 shadow-sm">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">AI prompt</p>
+            <p className="mt-2 text-lg font-semibold text-slate-900 leading-relaxed">
+              {latestAiMessage?.message ?? "Click Begin Reflection to get the first AI nudge."}
+            </p>
+            <div className="mt-1 flex items-center justify-between text-[11px] text-slate-500">
+              {latestAiMessage?.timestamp ? <span>Last update: {latestAiMessage.timestamp}</span> : <span>&nbsp;</span>}
+              {coachLoading ? <span>Thinking...</span> : null}
             </div>
+          </div>
+
+          <div className="relative">
+            <Textarea
+              ref={textareaRef}
+              value={textInput}
+              onChange={(e) => setTextInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  handleSendText(e);
+                }
+              }}
+              placeholder={isConnected ? "Enter your reflection here..." : "Click 'Begin Reflection' to start..."}
+              className="min-h-[320px] resize-none pr-12 text-base"
+              disabled={!isConnected}
+            />
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={handleSendText}
+              disabled={!textInput.trim() || !isConnected}
+              className="absolute right-3 bottom-3 h-8 w-8"
+            >
+              <SendIcon className="h-4 w-4" />
+            </Button>
+          </div>
+
+          <div className="w-full">
             <ScoreCard score={score} loading={loadingScore} questionKey={questionKey} showAll={showAllScores} />
           </div>
         </div>
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex flex-col items-center gap-2 text-center">
           <div className="text-sm text-muted-foreground">
             {status ?? "When you finish the reflection, score the transcript."}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <button
               onClick={onClear}
-              className="rounded-md border px-3 py-2 text-sm"
+              className="rounded-md border px-4 py-2 text-sm"
               disabled={loadingScore}
             >
               Clear transcript
             </button>
             <button
               onClick={onScore}
-              className="rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground"
+              className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
               disabled={loadingScore || messages.length === 0}
             >
               {loadingScore ? "Scoring..." : "Score transcript"}

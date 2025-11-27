@@ -161,9 +161,9 @@ export function LeftNav({ steps, currentId, onSelect }: LeftNavProps) {
   return (
     <aside className="w-80 bg-[#f9fafb] border-r border-slate-200">
       <div className="px-4 py-4 space-y-2 border-b border-slate-200">
-        <div className="text-sm font-semibold leading-tight text-[#0f1729]">Acquisitions Mock Interview</div>
+        <div className="text-sm font-semibold leading-tight text-[#0f1729]">Career Pathway Reflection</div>
         <div className="text-xs text-muted-foreground">
-          {completedQuestions} / {totalQuestions} questions completed
+          {completedQuestions} / {totalQuestions} prompts completed
         </div>
         <div className="h-2 w-full rounded-full bg-slate-100">
           <div

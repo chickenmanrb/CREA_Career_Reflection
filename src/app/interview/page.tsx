@@ -6,7 +6,7 @@ import { AlertCircle } from "lucide-react";
 
 import { StepRenderer } from "@/components/interview/StepRenderer";
 import { LeftNav } from "@/components/layout/LeftNav";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { flowConfig } from "@/lib/flow-config";
 import type { GeminiAnalysis, QuestionKey, TranscriptMessage } from "@/types/interview";
 
@@ -166,9 +166,9 @@ export default function InterviewPage() {
         <div className="text-xs font-semibold text-white/80">creanalyst.com</div>
       </header>
 
-      <div className="flex min-h-[calc(100vh-56px)]">
+        <div className="flex min-h-[calc(100vh-56px)]">
         <LeftNav steps={stepsForNav} currentId={currentStep.id} onSelect={setCurrentStepId} />
-        <main className="flex-1 overflow-y-auto px-8 py-10">
+        <main className="flex-1 overflow-y-auto px-6 py-8 md:px-8 md:py-10">
           <div className="mb-6 flex items-center justify-between gap-4">
             <div className="space-y-2">
               <h1 className="text-3xl font-semibold">Career Pathway Reflection</h1>
@@ -224,18 +224,6 @@ export default function InterviewPage() {
           )}
 
           <Card className="border border-primary/10 bg-gradient-to-br from-primary/5 to-background">
-            {currentStep?.type === "agent" ? (
-              <CardHeader>
-                <CardTitle>
-                  Live Answer — {currentStep.questionText || "Restate the question"}
-                </CardTitle>
-              </CardHeader>
-            ) : currentStep?.type !== "question" && currentStep?.id !== "final-review" && currentStep?.type !== "intro" ? (
-              <CardHeader>
-                <CardTitle>{currentStep?.title}</CardTitle>
-                <CardDescription>{currentStep?.description}</CardDescription>
-              </CardHeader>
-            ) : null}
             <CardContent className="space-y-6">
               <StepRenderer
                 step={currentStep}
