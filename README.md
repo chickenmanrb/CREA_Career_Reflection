@@ -1,38 +1,25 @@
 # Career Pathway Reflection (Text-Only)
 
-A six-prompt, text-first reflection tool that gives quick AI follow-ups and rubric-based feedback on clarity, specificity, and alignment to your goals. Uses Next.js 16, ElevenLabs UI conversation components for the transcript, LLM scoring (Anthropic/OpenAI), and Supabase persistence (separate tables from the voice app).
+Six prompts, quick AI follow-ups, and a clean transcript for each written reflection. The experience is entirely text-based: you open `/interview`, start the response, and the ElevenLabs conversational coach replies with one-nudge guidance at a time.
 
 ## Setup
-1) Install deps
+1. Install dependencies:
    ```bash
    npm install
    ```
-
-2) Env vars — copy `.env.example` to `.env.local` and fill:
-   - `DEFAULT_MODEL_PROVIDER` (anthropic|openai)
-   - `OPENAI_API_KEY`, `OPENAI_MODEL` (if using OpenAI)
-   - `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL` (if using Anthropic)
-   - `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` (required to persist sessions/scores)
-   - ElevenLabs keys optional (kept for future voice features)
-
-3) Create reflection tables (kept separate from the voice interview app)
-   - Run `supabase/migrations/20250314_create_reflection_tables.sql` in the Supabase SQL editor, or via psql.
-
-4) Run dev server
+2. Copy `.env.example` to `.env.local` and set `ELEVENLABS_API_KEY` (the backend route calls the ElevenLabs ConvAI chat endpoint).
+3. Start the dev server:
    ```bash
    npm run dev
    ```
-   Then open http://localhost:3000 (the flow is at `/interview`).
+   Open http://localhost:3000 and visit `/interview`.
 
-## What’s inside
-- `src/app/page.tsx` — landing/setup form, now branded for “Career Pathway Reflection”.
-- `src/app/interview/page.tsx` — main flow (prep → write → score) using text input and ElevenLabs conversation UI for transcript display.
-- `src/app/api/score/route.ts` — LLM scoring endpoint writing to `reflection_sessions` / `reflection_scores` tables.
-- `src/lib/flow-config.ts` — six prompts with agent IDs kept for reference.
-- `src/lib/rubric.ts` — rubric schema, prompt, and parsing.
-- `supabase/migrations/20250314_create_reflection_tables.sql` — DDL for isolated reflection tables.
+> There is no scoring loop or Supabase persistence anymore—just six text prompts and a guided chat transcript.
 
-## Notes
-- CSV export is named `reflection-report.csv`.
-- Build/lint: `npm run lint` (passes; one existing Codacy lint warning), `npm run build` tested OK.
-- Supabase tables are separated from any voice/“mock interview” data to avoid mixing records.
+## What's inside
+- `src/app/interview/page.tsx` — main landing+prompt layout with the left navigation panel.
+- `src/components/interview/StepRenderer.tsx` — handles the start/end controls, textarea, and transcript toggle.
+- `src/components/interview/Transcript.tsx` — renders the ElevenLabs Conversation UI with the transcript.
+- `src/components/layout/LeftNav.tsx` — flat navigation showing progress through the six prompts.
+- `src/lib/flow-config.ts` — prompt metadata plus optional agent IDs.
+- `src/app/api/coach/route.ts` — server-side proxy to the ElevenLabs ConvAI chat endpoint.

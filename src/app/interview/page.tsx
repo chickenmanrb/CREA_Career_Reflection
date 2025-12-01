@@ -1,14 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { AlertCircle } from "lucide-react";
 
 import { StepRenderer } from "@/components/interview/StepRenderer";
 import { LeftNav } from "@/components/layout/LeftNav";
 import { Card, CardContent } from "@/components/ui/card";
 import { flowConfig } from "@/lib/flow-config";
-import type { GeminiAnalysis, QuestionKey, TranscriptMessage } from "@/types/interview";
+import type { QuestionKey, TranscriptMessage } from "@/types/interview";
 
 function questionKeyFromStepId(stepId: string): QuestionKey | undefined {
   const match = stepId.match(/^q(\d)-/);
@@ -24,44 +24,9 @@ function questionKeyFromStepId(stepId: string): QuestionKey | undefined {
 }
 
 // Text-only mode: agent IDs are kept in the flow for reference but not required here.
-const AGENT_ID = "";
-function emptyScore(): GeminiAnalysis {
-  const base = {
-    score_content: 0,
-    score_communication_clarity: 0,
-    score_conciseness_efficiency: 0,
-    score_specificity: 0,
-    strengths: [] as string[],
-    weaknesses: [] as string[],
-  };
-  return {
-    questions: {
-      q1_attracts: { ...base },
-      q2_concerns: { ...base },
-      q3_questions: { ...base },
-      q4_direct_skills: { ...base },
-      q5_improve_skills: { ...base },
-      q6_connect: { ...base },
-    },
-  };
-}
-
 export default function InterviewPage() {
   const [messages, setMessages] = useState<TranscriptMessage[]>([]);
-  const [score, setScore] = useState<GeminiAnalysis | null>(null);
-  const [loadingScore, setLoadingScore] = useState(false);
-  const [status, setStatus] = useState<string | null>(null);
-  const [provider, setProvider] = useState<"openai" | "anthropic">("anthropic");
   const [currentStepId, setCurrentStepId] = useState<string>(flowConfig.steps[0]?.id ?? "");
-  const [candidateName, setCandidateName] = useState("");
-  const [candidateEmail, setCandidateEmail] = useState("");
-
-  useEffect(() => {
-    const storedName = typeof window !== "undefined" ? localStorage.getItem("crea_candidate_name") : "";
-    const storedEmail = typeof window !== "undefined" ? localStorage.getItem("crea_candidate_email") : "";
-    if (storedName) setCandidateName(storedName);
-    if (storedEmail) setCandidateEmail(storedEmail);
-  }, []);
 
   // Check if we have any Agent IDs configured in flow-config for the new steps
   const agentConfigured = flowConfig.steps.some((s) => s.type === "agent" && s.agentId && s.agentId.length > 0);
@@ -79,62 +44,6 @@ export default function InterviewPage() {
         questionKey,
       },
     ]);
-  };
-
-  const handleScore = async () => {
-    if (messages.length === 0) {
-      setStatus("Transcript is empty. Enter an answer first.");
-      return;
-    }
-
-    setStatus(null);
-    setLoadingScore(true);
-
-    try {
-      const res = await fetch("/api/score", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          transcript: messages,
-          agentId: AGENT_ID,
-          candidateName,
-          candidateEmail,
-          provider,
-          questionKey: questionKeyFromStepId(currentStepId),
-        }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error ?? "Failed to score transcript");
-      }
-
-      const result: GeminiAnalysis = data.scores;
-      const questionKey = questionKeyFromStepId(currentStepId);
-
-      // If scoring a single question, merge into aggregate score object.
-      if (questionKey) {
-        setScore((prev) => {
-          const base = prev ?? emptyScore();
-          return {
-            questions: {
-              ...base.questions,
-              [questionKey]: result.questions[questionKey],
-            },
-          };
-        });
-      } else {
-        setScore(result);
-      }
-      setStatus("Scored successfully.");
-    } catch (error) {
-      console.error(error);
-      setStatus(
-        error instanceof Error ? error.message : "Unable to score transcript."
-      );
-    } finally {
-      setLoadingScore(false);
-    }
   };
 
   const currentStep = useMemo(
@@ -193,9 +102,7 @@ export default function InterviewPage() {
                 <span className="text-foreground font-semibold">
                   {currentPromptNumber
                     ? `Prompt ${currentPromptNumber} of ${totalPrompts}: ${currentStep.title}`
-                    : currentStep.id === "final-review"
-                      ? "Final Review"
-                      : currentStep.title}
+                    : currentStep.title}
                 </span>
                 <button
                   onClick={goNext}
@@ -205,21 +112,6 @@ export default function InterviewPage() {
                   Next
                 </button>
               </div>
-              <div className="flex items-center gap-2 text-[11px] font-medium text-foreground">
-                <label className="flex items-center gap-2">
-                  Model provider
-                  <select
-                    className="rounded-md border px-2 py-1 text-xs"
-                    value={provider}
-                    onChange={(e) =>
-                      setProvider(e.target.value === "anthropic" ? "anthropic" : "openai")
-                    }
-                  >
-                    <option value="openai">OpenAI</option>
-                    <option value="anthropic">Claude</option>
-                  </select>
-                </label>
-              </div>
             </div>
           </div>
 
@@ -227,7 +119,7 @@ export default function InterviewPage() {
             <div className="mb-4 flex items-center gap-3 rounded-lg border border-dashed bg-amber-50 p-4 text-amber-900">
               <AlertCircle className="h-5 w-5" />
               <div className="text-sm">
-                Agent IDs are optional in text-only mode. You can still practice and score responses.
+                Agent IDs are optional in text-only mode. You can still practice the prompts using the text coach.
               </div>
             </div>
           )}
@@ -237,17 +129,9 @@ export default function InterviewPage() {
               <StepRenderer
                 step={currentStep}
                 messages={messages}
-                score={score}
-                loadingScore={loadingScore}
-                status={status}
                 onMessage={handleMessage}
-                onScore={handleScore}
-                onClear={() => {
-                  setMessages([]);
-                  setScore(emptyScore());
-                }}
+                onClear={() => setMessages([])}
                 onAdvance={goNext}
-                provider={provider}
               />
             </CardContent>
           </Card>

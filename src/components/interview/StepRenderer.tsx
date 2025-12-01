@@ -3,31 +3,12 @@
 import { useState, useRef, useCallback } from "react";
 import { SendIcon } from "lucide-react";
 
-import { ScoreCard } from "@/components/interview/ScoreCard";
 import { Transcript } from "@/components/interview/Transcript";
 import { VideoFrame } from "@/components/ui/video-frame";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import type { FlowStep } from "@/types/flow";
-import type { GeminiAnalysis, QuestionKey, TranscriptMessage } from "@/types/interview";
-
-const orderedQuestionKeys: QuestionKey[] = [
-  "q1_attracts",
-  "q2_concerns",
-  "q3_questions",
-  "q4_direct_skills",
-  "q5_improve_skills",
-  "q6_connect",
-];
-
-const questionLabels: Record<QuestionKey, string> = {
-  q1_attracts: "Attraction to pathway",
-  q2_concerns: "Concerns/Risks",
-  q3_questions: "Questions/Curiosities",
-  q4_direct_skills: "Directly Applicable Skills",
-  q5_improve_skills: "Improvement Areas",
-  q6_connect: "Networking Strategy",
-};
+import type { QuestionKey, TranscriptMessage } from "@/types/interview";
 
 function questionKeyFromStepId(stepId: string): QuestionKey | undefined {
   const match = stepId.match(/^q(\d)-/);
@@ -45,14 +26,9 @@ function questionKeyFromStepId(stepId: string): QuestionKey | undefined {
 type StepRendererProps = {
   step: FlowStep;
   messages: TranscriptMessage[];
-  score: GeminiAnalysis | null;
-  loadingScore: boolean;
-  status: string | null;
   onMessage: (message: { source: "user" | "ai"; message: string }) => void;
-  onScore: () => void;
   onClear: () => void;
   onAdvance: () => void;
-  provider: "openai" | "anthropic";
 };
 
 async function fetchCoachReply(questionText: string | undefined, userMessage: string, agentId: string) {
@@ -73,24 +49,17 @@ async function fetchCoachReply(questionText: string | undefined, userMessage: st
 export function StepRenderer({
   step,
   messages,
-  score,
-  loadingScore,
-  status,
   onMessage,
-  onScore,
   onClear,
   onAdvance,
-  provider,
 }: StepRendererProps) {
-  void provider;
-  const questionKey = questionKeyFromStepId(step.id);
-  const showAllScores = step.id === "final-review";
-
   const [textInput, setTextInput] = useState("");
   const [callState, setCallState] = useState<"disconnected" | "connected">("disconnected");
   const isConnected = callState === "connected";
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const aiMessages = messages.filter((msg) => msg.source === "ai" && msg.questionKey === questionKey);
+  const aiMessages = messages.filter(
+    (msg) => msg.source === "ai" && msg.questionKey === questionKeyFromStepId(step.id)
+  );
   const latestAiMessage = aiMessages[aiMessages.length - 1];
   const [coachLoading, setCoachLoading] = useState(false);
   const [showTranscript, setShowTranscript] = useState(false);
@@ -148,57 +117,11 @@ export function StepRenderer({
     onClear();
   }, [endConversation, onClear]);
 
-  const downloadCsv = useCallback(() => {
-    if (!score) return;
-    const headers = [
-      "Question",
-      "Content",
-      "Communication clarity",
-      "Conciseness & efficiency",
-      "Specificity",
-      "Strengths",
-      "Weaknesses",
-    ];
-
-    const toCsvValue = (value: string | number) => {
-      const str = typeof value === "string" ? value : String(value);
-      const escaped = str.replace(/"/g, '""');
-      return `"${escaped}"`;
-    };
-
-    const rows = orderedQuestionKeys.map((key) => {
-      const data = score.questions[key];
-      return [
-        questionLabels[key],
-        data?.score_content ?? "",
-        data?.score_communication_clarity ?? "",
-        data?.score_conciseness_efficiency ?? "",
-        data?.score_specificity ?? "",
-        (data?.strengths ?? []).join("; "),
-        (data?.weaknesses ?? []).join("; "),
-      ];
-    });
-
-    const csv = [headers, ...rows]
-      .map((row) => row.map(toCsvValue).join(","))
-      .join("\n");
-
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "reflection-report.csv");
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    URL.revokeObjectURL(url);
-  }, [score]);
-
   if (step.type === "intro") {
     return (
       <VideoFrame
         title="Why This Matters"
-        description="Clarify your fit and interests through six written prompts. You’ll get quick AI nudges plus structured feedback to spot strengths, gaps, and next actions."
+        description="Clarify your fit and interests through six written prompts. You’ll write answers, get light AI nudges plus structured feedback to spot strengths, gaps, and next actions."
       />
     );
   }
@@ -256,7 +179,7 @@ export function StepRenderer({
               </button>
             </div>
             <p className="text-xs text-muted-foreground">
-              Write, send, and get a tailored follow-up. When satisfied, score the transcript.
+              Write, send, and get a tailored follow-up. Use the nav on the right to move between prompts.
             </p>
           </div>
 
@@ -285,10 +208,6 @@ export function StepRenderer({
             </Button>
           </div>
 
-          <div className="w-full">
-            <ScoreCard score={score} loading={loadingScore} questionKey={questionKey} showAll={showAllScores} />
-          </div>
-
           <div className="w-full rounded-lg border bg-white px-4 py-3 shadow-sm">
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold text-slate-800">Transcript</span>
@@ -309,84 +228,15 @@ export function StepRenderer({
             )}
           </div>
         </div>
-        <div className="flex flex-col items-center gap-2 text-center">
-          <div className="text-sm text-muted-foreground">
-            {status ?? "When you finish the reflection, score the transcript."}
-          </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={onClear}
-                className="rounded-full border px-4 py-2 text-sm"
-                disabled={loadingScore}
-              >
-                Clear transcript
-              </button>
-              <button
-                onClick={onScore}
-                className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow"
-                disabled={loadingScore || messages.length === 0}
-              >
-                {loadingScore ? "Scoring..." : "Score transcript"}
-              </button>
-            </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (step.type === "review") {
-    return (
-      <div className="space-y-4">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-xl font-semibold">{step.title}</h2>
-            <p className="text-sm text-muted-foreground">Review the scoring results below.</p>
-          </div>
-          {step.id === "final-review" ? (
-            <Button
-              variant="outline"
-              onClick={downloadCsv}
-              disabled={!score || loadingScore}
-            >
-              Download CSV report
-            </Button>
-          ) : null}
-        </div>
-        <div className="space-y-4">
-          <ScoreCard score={score} loading={loadingScore} questionKey={questionKey} showAll={showAllScores} />
-          {step.id === "final-review" ? (
-            <div className="rounded-lg border bg-muted/30 p-4 text-sm text-muted-foreground">
-              <h3 className="text-base font-semibold text-foreground">Understanding Your Scores</h3>
-              <div className="mt-2 space-y-2">
-                <div>
-                  <p className="font-medium text-foreground">General Scoring Guidance:</p>
-                  <ul className="mt-1 list-disc space-y-1 pl-5">
-                    <li>Score below 6: Needs meaningful refinement before sharing with mentors, managers, or recruiters.</li>
-                    <li>Score 6–8: Solid but could be sharper—tighten specifics and structure.</li>
-                    <li>Score 8+: Clear, specific, and well-aligned—strong for networking or applications.</li>
-                  </ul>
-                </div>
-                <div>
-                  <p className="font-medium text-foreground">Important Context:</p>
-                  <ul className="mt-1 list-disc space-y-1 pl-5">
-                    <li>Role level: Analyst expectations differ from Associate or VP-level roles.</li>
-                    <li>Market competitiveness: Top-tier institutional firms set a higher bar than regional owner-operators.</li>
-                    <li>Firm priorities: Different teams weight technical skills, cultural fit, and competencies differently.</li>
-                    <li>Conversation stage: Early networking chats differ from final-round interviews.</li>
-                  </ul>
-                </div>
-                <div>
-                  <p className="font-medium text-foreground">Remember:</p>
-                  <ul className="mt-1 list-disc space-y-1 pl-5">
-                    <li>Interview performance is cumulative; one weaker answer can be offset elsewhere.</li>
-                    <li>Cultural fit and personality alignment matter beyond what scores capture.</li>
-                    <li>Use these scores as diagnostics to target improvements before real conversations.</li>
-                    <li>Practice and iteration build momentum—multiple mock sessions surface performance patterns.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          ) : null}
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <button
+            onClick={onClear}
+            className="rounded-full border px-4 py-2 text-sm"
+            disabled={messages.length === 0}
+          >
+            Clear transcript
+          </button>
+          <span>Conversation history is local—keep writing until you feel confident.</span>
         </div>
       </div>
     );
