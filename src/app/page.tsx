@@ -54,7 +54,7 @@ export default function Home() {
             <div className="rounded-xl border bg-white p-4 shadow-sm">
               <h3 className="text-sm font-semibold text-slate-900">What to expect</h3>
               <p className="text-sm text-slate-600 leading-relaxed">
-                6 prompts, text entry, light AI follow-ups, and an automated rubric with strengths/weaknesses. Use this to clarify your career story and next steps.
+                Six (6) Custom Career Reflection sessions with an AI coach, designed to get you thinking in the right direction. Use this to clarify your career story and next steps.
               </p>
             </div>
             <div className="rounded-xl border bg-white p-4 shadow-sm">
