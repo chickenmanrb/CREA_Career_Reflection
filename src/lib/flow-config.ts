@@ -1,7 +1,7 @@
 import type { MultiAgentConfig } from "@/types/flow";
 import { DEFAULT_HARD_STOP_MS, DEFAULT_SOFT_WARNING_MS, DEFAULT_WRAP_LINE } from "@/lib/time-limit";
 
-// Flow for 6 questions (Intro + 6x(Prep/Agent/Review) + Final Review = 20 steps)
+// Flow for 6 questions (Intro + 6 agent conversations)
 export const flowConfig: MultiAgentConfig = {
   steps: [
     {
@@ -25,12 +25,6 @@ export const flowConfig: MultiAgentConfig = {
       hardStopMs: DEFAULT_HARD_STOP_MS,
       wrapUpLine: DEFAULT_WRAP_LINE,
     },
-    {
-      id: "q1-review",
-      type: "review",
-      title: "Debrief",
-      description: "Scoring and review for Agent 1 conversation.",
-    },
     // --- Question 2 ---
     {
       id: "q2-agent",
@@ -42,12 +36,6 @@ export const flowConfig: MultiAgentConfig = {
       softWarningMs: DEFAULT_SOFT_WARNING_MS,
       hardStopMs: DEFAULT_HARD_STOP_MS,
       wrapUpLine: DEFAULT_WRAP_LINE,
-    },
-    {
-      id: "q2-review",
-      type: "review",
-      title: "Analyze Your Answer",
-      description: "Scoring and review for Agent 2 conversation.",
     },
     // --- Question 3 ---
     {
@@ -61,12 +49,6 @@ export const flowConfig: MultiAgentConfig = {
       hardStopMs: DEFAULT_HARD_STOP_MS,
       wrapUpLine: DEFAULT_WRAP_LINE,
     },
-    {
-      id: "q3-review",
-      type: "review",
-      title: "Analyze Your Answer",
-      description: "Scoring and review for Agent 3 conversation.",
-    },
     // --- Question 4 ---
     {
       id: "q4-agent",
@@ -78,12 +60,6 @@ export const flowConfig: MultiAgentConfig = {
       softWarningMs: DEFAULT_SOFT_WARNING_MS,
       hardStopMs: DEFAULT_HARD_STOP_MS,
       wrapUpLine: DEFAULT_WRAP_LINE,
-    },
-    {
-      id: "q4-review",
-      type: "review",
-      title: "Analyze Your Answer",
-      description: "Scoring and review for Agent 4 conversation.",
     },
     // --- Question 5 ---
     {
@@ -97,12 +73,6 @@ export const flowConfig: MultiAgentConfig = {
       hardStopMs: DEFAULT_HARD_STOP_MS,
       wrapUpLine: DEFAULT_WRAP_LINE,
     },
-    {
-      id: "q5-review",
-      type: "review",
-      title: "Analyze Your Answer",
-      description: "Scoring and review for Agent 5 conversation.",
-    },
     // --- Question 6 ---
     {
       id: "q6-agent",
@@ -114,19 +84,6 @@ export const flowConfig: MultiAgentConfig = {
       softWarningMs: DEFAULT_SOFT_WARNING_MS,
       hardStopMs: DEFAULT_HARD_STOP_MS,
       wrapUpLine: DEFAULT_WRAP_LINE,
-    },
-    {
-      id: "q6-review",
-      type: "review",
-      title: "Analyze Your Answer",
-      description: "Scoring and review for Agent 6 conversation.",
-    },
-    // --- Final Review ---
-    {
-      id: "final-review",
-      type: "review",
-      title: "7 - Review Interview Feedback",
-      description: "",
     },
   ],
 };
