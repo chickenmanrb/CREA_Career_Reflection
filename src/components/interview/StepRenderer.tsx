@@ -223,8 +223,9 @@ export function StepRenderer({
         <div className="rounded-xl border bg-gradient-to-br from-slate-50 via-white to-slate-100 p-6 shadow-sm">
           <h2 className="text-3xl font-semibold text-[#0f1729]">Congratulations on Reflecting</h2>
           <p className="mt-3 text-base text-slate-700 leading-relaxed">
-            You’ve navigated six prompts, practiced with your AI coach, and captured everything in this conversation.
-            Use the download below to keep a record of your reflections and revisit the ideas anytime.
+            Congratulations on reflecting on your career path. This exercise is an important part of the process that many people fail to take on.
+            Connecting your objectives and your values to your chosen path is the difference between a job and a career that you love.
+            Continue thinking about this and feel free to revisit this exercise if you want a refresher.
           </p>
         </div>
 
@@ -237,7 +238,7 @@ export function StepRenderer({
           </div>
           <Button
             variant="default"
-            className="rounded-full bg-[#0f1729] px-6 py-3 text-sm font-semibold text-white shadow-md hover:bg-slate-800"
+            className="rounded-full bg-[#05b6ff] px-6 py-3 text-sm font-semibold text-white shadow-md shadow-blue-200 hover:bg-[#0aa3e2]"
             onClick={onDownloadTranscript}
             disabled={!hasTranscript}
           >
