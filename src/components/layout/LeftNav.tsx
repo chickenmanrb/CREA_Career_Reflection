@@ -38,14 +38,11 @@ function IconCircle({ state }: { state: StepState }) {
 
   return <span className="h-4 w-4 rounded-full border border-slate-300" />;
 }
-
-function childLabel(type: FlowStep["type"]) {
-  if (type === "agent") return "Career Reflection";
-  return "Overview";
-}
-
 export function LeftNav({ steps, currentId, onSelect }: LeftNavProps) {
-  const navSteps = useMemo(() => steps.filter((step) => step.type === "intro" || step.type === "agent"), [steps]);
+  const navSteps = useMemo(
+    () => steps.filter((step) => step.type === "intro" || step.type === "agent" || step.type === "finish"),
+    [steps]
+  );
   const currentIdx = Math.max(0, navSteps.findIndex((s) => s.id === currentId));
   const agentSteps = navSteps.filter((step) => step.type === "agent");
   const currentAgentIdx = agentSteps.findIndex((step) => step.id === currentId);
@@ -74,27 +71,24 @@ export function LeftNav({ steps, currentId, onSelect }: LeftNavProps) {
           const isDone = state === "done";
 
           return (
-            <button
-              key={step.id}
-              onClick={() => onSelect(step.id)}
-              className={cn(
-                "flex w-full items-center gap-3 rounded-xl border bg-white px-3 py-3 text-left shadow-sm transition-all",
-                "hover:border-sky-300 hover:shadow",
-                isActive && "border-amber-400 bg-amber-50",
-                isDone && "border-slate-200"
-              )}
-            >
-              <IconCircle state={state} />
-              <div className="flex-1 space-y-1">
-                <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">
-                  {childLabel(step.type)}
-                </div>
-                <div className="text-[13px] font-medium text-slate-900 leading-snug">
-                  {step.type === "agent" ? step.questionText ?? step.title : step.title}
-                </div>
+          <button
+            key={step.id}
+            onClick={() => onSelect(step.id)}
+            className={cn(
+              "flex w-full items-center gap-3 rounded-xl border bg-white px-3 py-3 text-left shadow-sm transition-all",
+              "hover:border-sky-300 hover:shadow",
+              isActive && "border-amber-400 bg-amber-50",
+              isDone && "border-slate-200"
+            )}
+          >
+            <IconCircle state={state} />
+            <div className="flex-1">
+              <div className="text-[13px] font-medium text-slate-900 leading-snug">
+                {step.type === "agent" ? step.questionText ?? step.title : step.title}
               </div>
-              {isDone && <span className="text-emerald-500 text-xs font-semibold">Done</span>}
-            </button>
+            </div>
+            {isDone && <span className="text-emerald-500 text-xs font-semibold">Done</span>}
+          </button>
           );
         })}
       </div>

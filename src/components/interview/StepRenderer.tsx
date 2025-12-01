@@ -29,6 +29,7 @@ type StepRendererProps = {
   onMessage: (message: { source: "user" | "ai"; message: string }) => void;
   onClear: () => void;
   onAdvance: () => void;
+  onDownloadTranscript?: () => void;
 };
 
 async function fetchCoachReply(questionText: string | undefined, userMessage: string, agentId: string) {
@@ -52,6 +53,7 @@ export function StepRenderer({
   onMessage,
   onClear,
   onAdvance,
+  onDownloadTranscript,
 }: StepRendererProps) {
   const [textInput, setTextInput] = useState("");
   const [callState, setCallState] = useState<"disconnected" | "connected">("disconnected");
@@ -209,6 +211,38 @@ export function StepRenderer({
             Clear transcript
           </button>
           <span>Conversation history is local—keep writing until you feel confident.</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (step.type === "finish") {
+    const hasTranscript = messages.length > 0;
+    return (
+      <div className="space-y-6">
+        <div className="rounded-xl border bg-gradient-to-br from-slate-50 via-white to-slate-100 p-6 shadow-sm">
+          <h2 className="text-3xl font-semibold text-[#0f1729]">Congratulations on Reflecting</h2>
+          <p className="mt-3 text-base text-slate-700 leading-relaxed">
+            You’ve navigated six prompts, practiced with your AI coach, and captured everything in this conversation.
+            Use the download below to keep a record of your reflections and revisit the ideas anytime.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-4 rounded-xl border bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-sm font-semibold text-slate-800">Download Transcript</p>
+            <p className="text-xs text-muted-foreground">
+              Click to save a copy of the full transcript from all six prompts.
+            </p>
+          </div>
+          <Button
+            variant="default"
+            className="rounded-full bg-[#0f1729] px-6 py-3 text-sm font-semibold text-white shadow-md hover:bg-slate-800"
+            onClick={onDownloadTranscript}
+            disabled={!hasTranscript}
+          >
+            Download transcript
+          </Button>
         </div>
       </div>
     );

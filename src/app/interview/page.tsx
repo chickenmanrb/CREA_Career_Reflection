@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { AlertCircle } from "lucide-react";
 
 import { StepRenderer } from "@/components/interview/StepRenderer";
@@ -50,6 +50,42 @@ export default function InterviewPage() {
     () => flowConfig.steps.find((s) => s.id === currentStepId) ?? flowConfig.steps[0],
     [currentStepId]
   );
+
+  const downloadTranscript = useCallback(() => {
+    if (messages.length === 0) return;
+
+    const lines: string[] = [];
+    let lastStepId: string | undefined;
+    messages.forEach((msg) => {
+      if (msg.stepId && msg.stepId !== lastStepId) {
+        const stepMeta = flowConfig.steps.find((s) => s.id === msg.stepId);
+        if (stepMeta) {
+          lines.push(`--- ${stepMeta.questionText ?? stepMeta.title} ---`);
+        }
+        lastStepId = msg.stepId;
+      }
+
+      const speaker = msg.source === "user" ? "You" : "Coach";
+      lines.push(`${speaker}: ${msg.message}`);
+    });
+
+    const payload = [
+      "Career Pathway Reflection Transcript",
+      `Generated: ${new Date().toLocaleString()}`,
+      "",
+      ...lines,
+    ].join("\n");
+
+    const blob = new Blob([payload], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `career-reflection-transcript-${new Date()
+      .toISOString()
+      .replace(/[:.]/g, "-")}.txt`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }, [messages]);
 
   // Progress: use prompt count (agents) instead of total steps to avoid confusion.
   const promptSteps = useMemo(() => flowConfig.steps.filter((s) => s.type === "agent"), []);
@@ -125,15 +161,16 @@ export default function InterviewPage() {
           )}
 
           <Card className="border border-primary/10 bg-gradient-to-br from-primary/5 to-background flex flex-1 flex-col">
-            <CardContent className="space-y-6 flex flex-1 flex-col">
-              <StepRenderer
-                step={currentStep}
-                messages={messages}
-                onMessage={handleMessage}
-                onClear={() => setMessages([])}
-                onAdvance={goNext}
-              />
-            </CardContent>
+          <CardContent className="space-y-6 flex flex-1 flex-col">
+            <StepRenderer
+              step={currentStep}
+              messages={messages}
+              onMessage={handleMessage}
+              onClear={() => setMessages([])}
+              onAdvance={goNext}
+              onDownloadTranscript={downloadTranscript}
+            />
+          </CardContent>
           </Card>
 
         </main>

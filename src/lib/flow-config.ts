@@ -85,5 +85,11 @@ export const flowConfig: MultiAgentConfig = {
       hardStopMs: DEFAULT_HARD_STOP_MS,
       wrapUpLine: DEFAULT_WRAP_LINE,
     },
+    {
+      id: "finish",
+      type: "finish",
+      title: "Finish",
+      description: "Wrap up and download your transcript.",
+    },
   ],
 };
