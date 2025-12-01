@@ -1,4 +1,4 @@
-export type FlowStepType = "intro" | "question" | "agent" | "review";
+export type FlowStepType = "intro" | "question" | "agent" | "review" | "finish";
 
 export interface FlowStep {
   id: string;
