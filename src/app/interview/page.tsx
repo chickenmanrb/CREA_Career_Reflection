@@ -101,7 +101,7 @@ export default function InterviewPage() {
                 </button>
                 <span className="text-foreground font-semibold">
                   {currentPromptNumber
-                    ? `Prompt ${currentPromptNumber} of ${totalPrompts}: ${currentStep.title}`
+                    ? `Prompt ${currentPromptNumber} of ${totalPrompts}: ${currentStep.questionText ?? currentStep.title}`
                     : currentStep.title}
                 </span>
                 <button
