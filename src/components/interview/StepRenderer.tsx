@@ -62,8 +62,6 @@ export function StepRenderer({
   );
   const latestAiMessage = aiMessages[aiMessages.length - 1];
   const [coachLoading, setCoachLoading] = useState(false);
-  const [showTranscript, setShowTranscript] = useState(false);
-
   const startConversation = useCallback(() => {
     setCallState("connected");
     if (step.questionText) {
@@ -145,89 +143,63 @@ export function StepRenderer({
 
   if (step.type === "agent") {
     return (
-      <div className="space-y-4">
-        <div className="flex flex-col gap-4">
-          <div className="rounded-xl border bg-gradient-to-br from-slate-50 via-white to-slate-100 p-5 shadow-sm">
-            <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">
-              <span>AI Prompt</span>
-            </div>
-            <p className="mt-2 text-xl font-semibold text-slate-900 leading-relaxed">
-              {latestAiMessage?.message ?? "Click Start Your Response to get the first AI nudge."}
-            </p>
-            <div className="mt-1 flex items-center justify-between text-[11px] text-slate-500">
-              {latestAiMessage?.timestamp ? <span>Last update: {latestAiMessage.timestamp}</span> : <span>&nbsp;</span>}
-              {coachLoading ? <span>Thinking...</span> : null}
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center justify-between">
-              <Button
-                variant="default"
-                className="rounded-full bg-[#05b6ff] px-5 py-2 text-sm font-semibold text-white shadow-md hover:bg-[#0aa3e2]"
-                onClick={handleStartOrEnd}
-              >
-                {isConnected ? "End Reflection" : "Start Your Response"}
-              </Button>
-              <button
-                type="button"
-                onClick={resetConversation}
-                className="rounded-full px-3 py-1 text-xs font-semibold text-slate-600 underline-offset-2 hover:underline disabled:opacity-60"
-                disabled={!isConnected && messages.length > 0}
-              >
-                Reset
-              </button>
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Write, send, and get a tailored follow-up. Use the nav on the right to move between prompts.
-            </p>
-          </div>
-
-          <div className="relative">
-            <Textarea
-              ref={textareaRef}
-              value={textInput}
-              onChange={(e) => setTextInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  handleSendText(e);
-                }
-              }}
-              placeholder={isConnected ? "Type your reflection here..." : "Click 'Start Your Response' to begin..."}
-              className="min-h-[340px] resize-none pr-24 text-base"
-              disabled={!isConnected}
-            />
+      <div className="flex h-full flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
             <Button
-              size="sm"
-              variant="ghost"
-              onClick={handleSendText}
-              disabled={!textInput.trim() || !isConnected}
-              className="absolute right-3 bottom-3 h-9 px-3 text-sm font-semibold rounded-full"
+              variant="default"
+              className="rounded-full bg-[#05b6ff] px-8 py-4 text-lg font-semibold text-white shadow-2xl shadow-blue-300 hover:bg-[#0aa3e2]"
+              onClick={handleStartOrEnd}
             >
-              <SendIcon className="h-4 w-4 mr-1" /> Send
+              {isConnected ? "End Reflection" : "Start Reflection"}
             </Button>
-          </div>
-
-          <div className="w-full rounded-lg border bg-white px-4 py-3 shadow-sm">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-slate-800">Transcript</span>
-              <button
-                type="button"
-                onClick={() => setShowTranscript((v) => !v)}
-                className="text-xs font-semibold text-slate-600 underline-offset-2 hover:underline"
-              >
-                {showTranscript ? "Hide" : "Show"}
-              </button>
-            </div>
-            {showTranscript ? (
-              <div className="mt-3">
-                <Transcript messages={messages} />
-              </div>
-            ) : (
-              <p className="mt-2 text-xs text-slate-500">Collapsed. Click “Show” to review the chat.</p>
-            )}
+            <button
+              type="button"
+              onClick={resetConversation}
+              className="rounded-full px-3 py-1 text-xs font-semibold text-slate-600 underline-offset-2 hover:underline disabled:opacity-60"
+              disabled={!isConnected && messages.length > 0}
+            >
+              Reset
+            </button>
           </div>
         </div>
+
+        <div className="flex flex-col gap-2 flex-1 min-h-0">
+          <div className="flex items-center justify-between text-xs text-muted-foreground">
+            <span className="text-sm font-semibold text-slate-800">Conversation</span>
+            <span className="text-[11px] lowercase tracking-[0.08em] text-slate-500">Local history only</span>
+          </div>
+          <Transcript
+            messages={messages}
+            className="min-h-0 flex-1"
+          />
+        </div>
+
+        <div className="relative">
+          <Textarea
+            ref={textareaRef}
+            value={textInput}
+            onChange={(e) => setTextInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                handleSendText(e);
+              }
+            }}
+            placeholder={isConnected ? "Type your reflection here..." : "Click 'Start Your Response' to begin..."}
+            className="min-h-[180px] resize-none pr-24 text-base"
+            disabled={!isConnected}
+          />
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={handleSendText}
+            disabled={!textInput.trim() || !isConnected}
+            className="absolute right-3 bottom-3 h-9 px-3 text-sm font-semibold rounded-full"
+          >
+            <SendIcon className="h-4 w-4 mr-1" /> Send
+          </Button>
+        </div>
+
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <button
             onClick={onClear}

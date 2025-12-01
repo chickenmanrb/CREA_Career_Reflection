@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import type { TranscriptMessage } from "@/types/interview";
 import {
   Conversation,
@@ -11,11 +12,12 @@ import { cn } from "@/lib/utils";
 
 type TranscriptProps = {
   messages: TranscriptMessage[];
+  className?: string;
 };
 
-export function Transcript({ messages }: TranscriptProps) {
+export function Transcript({ messages, className }: TranscriptProps) {
   return (
-    <Conversation className="rounded-xl border bg-background/50">
+    <Conversation className={cn("rounded-xl border bg-background/50", className)}>
       <ConversationContent className="flex flex-col gap-3 p-4">
         {messages.length === 0 ? (
           <ConversationEmptyState

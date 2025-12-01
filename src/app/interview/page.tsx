@@ -85,7 +85,7 @@ export default function InterviewPage() {
 
         <div className="flex min-h-[calc(100vh-56px)]">
         <LeftNav steps={stepsForNav} currentId={currentStep.id} onSelect={setCurrentStepId} />
-        <main className="flex-1 overflow-y-auto px-6 py-8 md:px-8 md:py-10">
+        <main className="flex flex-1 flex-col overflow-y-auto px-6 py-8 md:px-8 md:py-10">
           <div className="mb-6 flex items-center justify-between gap-4">
             <div className="space-y-2">
               <h1 className="text-3xl font-semibold">Career Pathway Reflection</h1>
@@ -124,8 +124,8 @@ export default function InterviewPage() {
             </div>
           )}
 
-          <Card className="border border-primary/10 bg-gradient-to-br from-primary/5 to-background">
-            <CardContent className="space-y-6">
+          <Card className="border border-primary/10 bg-gradient-to-br from-primary/5 to-background flex flex-1 flex-col">
+            <CardContent className="space-y-6 flex flex-1 flex-col">
               <StepRenderer
                 step={currentStep}
                 messages={messages}
