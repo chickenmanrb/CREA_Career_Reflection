@@ -52,12 +52,6 @@ export default function Home() {
 
           <div className="space-y-3">
             <div className="rounded-xl border bg-white p-4 shadow-sm">
-              <h3 className="text-sm font-semibold text-slate-900">What to expect</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Six (6) Custom Career Reflection sessions with an AI coach, designed to get you thinking in the right direction. Use this to clarify your career story and next steps.
-              </p>
-            </div>
-            <div className="rounded-xl border bg-white p-4 shadow-sm">
               <h3 className="text-sm font-semibold text-slate-900">Ready?</h3>
               <p className="text-sm text-slate-600">Enter your info, then start the reflection.</p>
               <form className="mt-3 space-y-3" onSubmit={handleStart}>
