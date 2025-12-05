@@ -1,0 +1,13 @@
+2025-12-04: Added prompt reminder between Start/Reset controls on agent conversation steps.
+2025-12-04: Moved each prompt title into the transcript header, above the conversation window.
+2025-12-04: Scoped the transcript view per agent while preserving the global log for downloads.
+2025-12-04: Force redeploy of StepRenderer on step change so any running conversation ends when switching agents.
+2025-12-04: Swapped the coach API to use ElevenLabs’ signed WebSocket stream and surface live replies (no deterministic fallback).
+2025-12-04: Surfaced detailed coach errors on the UI and propagates HTTP messages after fetching /api/coach.
+2025-12-04: Verified /api/coach hits ElevenLabs’ signed websocket, but the agent’s first response just repeats the prompt; captured curl/log output for reference.
+2025-12-04: Added persistent WebSocket sessions per agent so multi-turn context stays intact and exposed a DELETE hook to tear them down.
+2025-12-04: Allow finish page to enable transcript download even with partial progress by checking the global message log.
+2025-12-04: Start now calls ElevenLabs first message and waits for that reply so the agent controls the opening prompt.
+2025-12-04: Start now reuses the existing POST call (with an empty user answer) so the agent's first message appears without any local welcome copy.
+2025-12-05: Tagged coach messages with their step IDs, stopped re-sending the prompt text while calling ElevenLabs, and refreshed the .env.example guidance for the agent IDs.
+2025-12-05: Fixed StepRenderer cleanup loops that were ending ElevenLabs sessions on every render; now sessions persist after clicking Start Reflection.
