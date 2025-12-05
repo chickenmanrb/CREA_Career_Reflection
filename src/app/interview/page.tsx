@@ -88,7 +88,7 @@ export default function InterviewPage() {
     });
 
     const payload = [
-      "Career Pathway Reflection Transcript",
+      "Acquisitions Career Pathway Reflection Transcript",
       `Generated: ${new Date().toLocaleString()}`,
       "",
       ...lines,
@@ -132,7 +132,7 @@ export default function InterviewPage() {
       <header className="flex items-center justify-between bg-[#0f1729] px-5 py-3 text-white shadow">
         <div className="flex items-center gap-3">
           <Image src="/assets/CRE logo.webp" alt="CRE Analyst" width={120} height={32} className="h-8 w-auto" />
-          <div className="text-sm font-semibold tracking-wide">Career Pathway Reflection</div>
+          <div className="text-sm font-semibold tracking-wide">Acquisitions Career Pathway Reflection</div>
         </div>
         <div className="text-xs font-semibold text-white/80">creanalyst.com</div>
       </header>
@@ -142,7 +142,7 @@ export default function InterviewPage() {
         <main className="flex flex-1 flex-col overflow-y-auto px-6 py-8 md:px-8 md:py-10">
           <div className="mb-6 flex items-center justify-between gap-4">
             <div className="space-y-2">
-              <h1 className="text-3xl font-semibold">Career Pathway Reflection</h1>
+              <h1 className="text-3xl font-semibold">Acquisitions Career Pathway Reflection</h1>
               </div>
             <div className="flex items-center gap-3 text-xs text-muted-foreground">
               <div className="flex items-center gap-2">

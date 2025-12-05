@@ -32,7 +32,7 @@ export default function Home() {
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-md">
         <div className="grid gap-6 md:grid-cols-[1.3fr_1fr]">
           <div className="space-y-3">
-            <h1 className="text-2xl font-semibold text-slate-900">Career Pathway Reflection</h1>
+            <h1 className="text-2xl font-semibold text-slate-900">Acquisitions Career Pathway Reflection</h1>
             <p className="text-slate-600 text-sm">
               Work through six reflection prompts and get tailored feedback on clarity, specificity, and alignment to your goals. The flow is fully text-based—write, get a brief AI follow-up, then score your responses to see strengths and gaps.
             </p>

@@ -1,4 +1,4 @@
-# Roadmap: Career Pathway Reflection (Text)
+# Roadmap: Acquisitions Career Pathway Reflection (Text)
 
 ## Goal
 Build a lightweight text-first reflection experience that walks a user through six career pathway prompts, lets them interact with a concise ElevenLabs conversational coach, and surfaces a clean transcript of every response. Scoring/evaluation and Supabase persistence were removed to keep the flow simple and focused on writing.

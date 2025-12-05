@@ -1,4 +1,4 @@
-# Career Pathway Reflection (Text-Only)
+# Acquisitions Career Pathway Reflection (Text-Only)
 
 Six prompts, quick AI follow-ups, and a clean transcript for each written reflection. The experience is entirely text-based: you open `/interview`, start the response, and the ElevenLabs conversational coach replies with one-nudge guidance at a time.
 
