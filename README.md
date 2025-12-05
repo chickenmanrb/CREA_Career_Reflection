@@ -22,4 +22,4 @@ Six prompts, quick AI follow-ups, and a clean transcript for each written reflec
 - `src/components/interview/Transcript.tsx` — renders the ElevenLabs Conversation UI with the transcript.
 - `src/components/layout/LeftNav.tsx` — flat navigation showing progress through the six prompts.
 - `src/lib/flow-config.ts` — prompt metadata plus optional agent IDs.
-- `src/app/api/coach/route.ts` — server-side proxy to the ElevenLabs ConvAI chat endpoint.
+- `src/app/api/coach/signed-url/route.ts` — returns a signed WebSocket URL that the client uses to start the ElevenLabs conversation.

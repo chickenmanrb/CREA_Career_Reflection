@@ -13,7 +13,7 @@ Build a lightweight text-first reflection experience that walks a user through s
 2. `app/interview/page.tsx` renders the nav/controls, calls `StepRenderer`, and keeps transcript state in-memory.
 3. `StepRenderer` manages the start/send controls and surface-level transcript, while `Transcript` renders the message list.
 4. `LeftNav` shows progress and lets users revisit earlier prompts without nested tabs.
-5. `app/api/coach/route.ts` relays user input to ElevenLabs in order to generate new AI guidance (no scoring).
+5. `app/api/coach/signed-url/route.ts` generates the signed WebSocket URL the client needs to start each ElevenLabs agent session.
 
 ## Project Structure
 - `src/app/interview/page.tsx` — main flow (intro + six prompt screens) plus layout chrome.
@@ -21,13 +21,13 @@ Build a lightweight text-first reflection experience that walks a user through s
 - `src/components/interview/Transcript.tsx` — ElevenLabs Conversation UI for the chat history.
 - `src/components/layout/LeftNav.tsx` — flat navigation/progress column.
 - `src/lib/flow-config.ts` — prompt metadata and agent IDs.
-- `src/app/api/coach/route.ts` — the server-side proxy that hits ElevenLabs and returns its reply.
+- `src/app/api/coach/signed-url/route.ts` — the endpoint that issues signed WebSocket URLs the client uses to kick off the coach.
 
 ## Key Steps to Work on
 1. Keep `flow-config` synchronized with the six prompts and agent IDs you want to keep in rotation.
 2. Make sure `StepRenderer` resets the transcript whenever the user starts a new response or clears history.
 3. Use `LeftNav` for navigation state so the UI stays predictable despite the one-question-at-a-time flow.
-4. If you need new prompts or follow-up phrasing, update `app/api/coach/route.ts` markup or agent configuration in ElevenLabs.
+4. If you need new prompts or follow-up phrasing, update the agent configuration in ElevenLabs and/or the signed-url handler so the client gets the correct WebSocket link.
 
 ## Setup
 1. Install dependencies:

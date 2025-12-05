@@ -31,25 +31,43 @@ export default function InterviewPage() {
   // Check if we have any Agent IDs configured in flow-config for the new steps
   const agentConfigured = flowConfig.steps.some((s) => s.type === "agent" && s.agentId && s.agentId.length > 0);
 
-  const handleMessage = (message: { source: "user" | "ai"; message: string }) => {
-    const questionKey = questionKeyFromStepId(currentStepId);
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: crypto.randomUUID(),
-        source: message.source,
-        message: message.message,
-        timestamp: new Date().toLocaleTimeString(),
-        stepId: currentStepId,
-        questionKey,
-      },
-    ]);
-  };
+  const handleMessage = useCallback(
+    (payload: {
+      source: "user" | "ai";
+      message: string;
+      stepId: string;
+      questionKey?: QuestionKey;
+    }) => {
+      const resolvedStepId = payload.stepId || currentStepId;
+      const resolvedQuestionKey = payload.questionKey ?? questionKeyFromStepId(resolvedStepId);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: crypto.randomUUID(),
+          source: payload.source,
+          message: payload.message,
+          timestamp: new Date().toLocaleTimeString(),
+          stepId: resolvedStepId,
+          questionKey: resolvedQuestionKey,
+        },
+      ]);
+    },
+    [currentStepId]
+  );
 
   const currentStep = useMemo(
     () => flowConfig.steps.find((s) => s.id === currentStepId) ?? flowConfig.steps[0],
     [currentStepId]
   );
+
+  const messagesForCurrentStep = useMemo(
+    () => messages.filter((msg) => msg.stepId === currentStepId),
+    [messages, currentStepId]
+  );
+
+  const clearCurrentStep = useCallback(() => {
+    setMessages((prev) => prev.filter((msg) => msg.stepId !== currentStepId));
+  }, [currentStepId]);
 
   const downloadTranscript = useCallback(() => {
     if (messages.length === 0) return;
@@ -163,13 +181,15 @@ export default function InterviewPage() {
           <Card className="border border-primary/10 bg-gradient-to-br from-primary/5 to-background flex flex-1 flex-col">
           <CardContent className="space-y-6 flex flex-1 flex-col">
             <StepRenderer
-              step={currentStep}
-              messages={messages}
-              onMessage={handleMessage}
-              onClear={() => setMessages([])}
-              onAdvance={goNext}
-              onDownloadTranscript={downloadTranscript}
-            />
+            key={currentStepId}
+            step={currentStep}
+            messages={messagesForCurrentStep}
+            allMessages={messages}
+            onMessage={handleMessage}
+            onClear={clearCurrentStep}
+            onAdvance={goNext}
+            onDownloadTranscript={downloadTranscript}
+          />
           </CardContent>
           </Card>
 
