@@ -62,6 +62,15 @@ function normalizeMessagePayload(payload: { source?: string; message?: string; t
   return { source, message: text };
 }
 
+function messageFromError(error: unknown, fallback: string) {
+  if (typeof error === "object" && error !== null && "message" in error) {
+    const msg = (error as { message?: unknown }).message;
+    if (typeof msg === "string" && msg.trim()) return msg;
+  }
+  if (typeof error === "string" && error.trim()) return error;
+  return fallback;
+}
+
 export function StepRenderer({
   step,
   messages,
@@ -91,14 +100,14 @@ export function StepRenderer({
       });
     },
     onError: (error) => {
-      const message = error instanceof Error ? error.message : "The reflection coach is unavailable.";
+      const message = messageFromError(error, "The reflection coach is unavailable.");
       setSendError(message);
       setCallState("disconnected");
     },
     onStatusChange: ({ status }) => {
       if (status === "connecting") {
         setCallState("connecting");
-      } else if (status === "connected" || status === "transcribing") {
+      } else if (status === "connected") {
         setCallState("connected");
       } else {
         setCallState("disconnected");
@@ -125,7 +134,7 @@ export function StepRenderer({
         connectionType: "websocket",
       });
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Unable to reach the reflection coach.";
+      const message = messageFromError(error, "Unable to reach the reflection coach.");
       setSendError(message);
       setCallState("disconnected");
     } finally {
@@ -151,7 +160,7 @@ export function StepRenderer({
         setSendError(null);
         await conversation.sendUserMessage(trimmedInput);
       } catch (error) {
-        const message = error instanceof Error ? error.message : "The reflection coach is unavailable.";
+        const message = messageFromError(error, "The reflection coach is unavailable.");
         setSendError(message);
       }
     },
