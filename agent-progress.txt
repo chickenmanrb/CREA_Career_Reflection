@@ -13,3 +13,4 @@
 2025-12-05: Fixed StepRenderer cleanup loops that were ending ElevenLabs sessions on every render; now sessions persist after clicking Start Reflection.
 2025-12-06: Updated finish screen messaging with new transcript download guidance and narrative framing copy.
 2025-12-06: Refreshed intro page copy and instructions for the acquisitions reflection module.
+2025-12-06: Added animated “thinking” indicator while the coach prepares a reply.

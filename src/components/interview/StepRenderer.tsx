@@ -84,6 +84,7 @@ export function StepRenderer({
   const [sendError, setSendError] = useState<string | null>(null);
   const [isStarting, setIsStarting] = useState(false);
   const [callState, setCallState] = useState<"disconnected" | "connecting" | "connected">("disconnected");
+  const [isAwaitingReply, setIsAwaitingReply] = useState(false);
   const questionKey = questionKeyFromStepId(step.id);
 
   const conversation = useConversation({
@@ -92,6 +93,7 @@ export function StepRenderer({
       const normalized = normalizeMessagePayload(payload);
       if (!normalized.message.trim()) return;
       if (normalized.source !== "ai") return;
+      setIsAwaitingReply(false);
       onMessage({
         source: normalized.source,
         message: normalized.message,
@@ -103,14 +105,17 @@ export function StepRenderer({
       const message = messageFromError(error, "The reflection coach is unavailable.");
       setSendError(message);
       setCallState("disconnected");
+      setIsAwaitingReply(false);
     },
     onStatusChange: ({ status }) => {
       if (status === "connecting") {
         setCallState("connecting");
       } else if (status === "connected") {
         setCallState("connected");
+        setIsAwaitingReply(false);
       } else {
         setCallState("disconnected");
+        setIsAwaitingReply(false);
       }
     },
   });
@@ -126,6 +131,7 @@ export function StepRenderer({
     setIsStarting(true);
     setSendError(null);
     setCallState("connecting");
+    setIsAwaitingReply(false);
 
     try {
       const signedUrl = await requestSignedUrl(step.agentId);
@@ -145,6 +151,7 @@ export function StepRenderer({
   const endConversation = useCallback(() => {
     conversation.endSession();
     setCallState("disconnected");
+    setIsAwaitingReply(false);
   }, [conversation]);
 
   const handleSendText = useCallback(
@@ -154,6 +161,7 @@ export function StepRenderer({
       if (!trimmedInput || !isConnected) return;
 
       onMessage({ source: "user", message: trimmedInput, stepId: step.id, questionKey });
+      setIsAwaitingReply(true);
       setTextInput("");
 
       try {
@@ -162,6 +170,7 @@ export function StepRenderer({
       } catch (error) {
         const message = messageFromError(error, "The reflection coach is unavailable.");
         setSendError(message);
+        setIsAwaitingReply(false);
       }
     },
     [textInput, onMessage, step.id, questionKey, conversation, isConnected]
@@ -182,6 +191,7 @@ export function StepRenderer({
     endConversation();
     setSendError(null);
     setTextInput("");
+    setIsAwaitingReply(false);
     onClear();
   }, [endConversation, onClear]);
 
@@ -198,6 +208,7 @@ export function StepRenderer({
     setCallState("disconnected");
     setSendError(null);
     setTextInput("");
+    setIsAwaitingReply(false);
     // Reset only when the flow step changes; avoid re-running on every render
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step.id]);
@@ -260,15 +271,25 @@ export function StepRenderer({
             <h3 className="text-lg font-semibold text-slate-900">{step.questionText ?? step.title}</h3>
           </div>
           <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span className="text-sm font-semibold text-slate-800">Conversation</span>
-            <span className="text-[11px] lowercase tracking-[0.08em] text-slate-500">Local history only</span>
-          </div>
-          <div className="flex-1 min-h-0">
-            <Transcript messages={messages} className="min-h-0 flex-1" />
-          </div>
+          <span className="text-sm font-semibold text-slate-800">Conversation</span>
+          <span className="text-[11px] lowercase tracking-[0.08em] text-slate-500">Local history only</span>
         </div>
+        <div className="flex-1 min-h-0">
+          <Transcript messages={messages} className="min-h-0 flex-1" />
+        </div>
+      </div>
 
-        <div className="relative">
+      {isConnected && isAwaitingReply && (
+        <div className="flex items-center gap-2 text-xs text-slate-600" aria-live="polite">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-slate-400 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-slate-500" />
+          </span>
+          <span>The coach is thinking...</span>
+        </div>
+      )}
+
+      <div className="relative">
           <Textarea
             value={textInput}
             onChange={(e) => setTextInput(e.target.value)}
