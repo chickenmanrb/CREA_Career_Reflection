@@ -206,7 +206,7 @@ export function StepRenderer({
     return (
       <VideoFrame
         title="Why This Matters"
-        description="Clarify your fit and interests through six written prompts. You’ll write answers, get light AI nudges plus structured feedback to spot strengths, gaps, and next actions."
+        description="Most people pursue career paths without truly understanding what the work actually entails. Job descriptions highlight responsibilities but miss the reality of daily work, the personality traits that lead to success, and the lifestyle trade-offs involved. This guided reflection helps you avoid costly mismatches by testing your understanding of acquisitions roles, correcting misconceptions, and honestly assessing whether this path aligns with who you are and what you want. The AI guide will challenge your thinking, probe your motivations, and help you understand how to position your unique background for success in this field."
       />
     );
   }
@@ -310,21 +310,24 @@ export function StepRenderer({
     return (
       <div className="space-y-6">
         <div className="rounded-xl border bg-gradient-to-br from-slate-50 via-white to-slate-100 p-6 shadow-sm">
-          <h2 className="text-3xl font-semibold text-[#0f1729]">Congratulations on Reflecting</h2>
+          <h2 className="text-3xl font-semibold text-[#0f1729]">Congratulations on Completing Your Career Path Reflection</h2>
           <p className="mt-3 text-base text-slate-700 leading-relaxed">
-            Congratulations on reflecting on your career path. This exercise is an important part of the process
-            that many people fail to take on. Connecting your objectives and your values to your chosen path is the
-            difference between a job and a career that you love. Continue thinking about this and feel free to revisit
-            this exercise if you want a refresher.
+            You&apos;ve just completed one of the most important exercises in career planning that most people skip entirely.
+            By honestly assessing your fit, you&apos;re already ahead of candidates who chase roles without understanding what
+            they&apos;re getting into.
+          </p>
+          <p className="mt-3 text-base text-slate-700 leading-relaxed">
+            <span className="font-semibold">Why This Matters:</span> When you&apos;re crafting your story for networking
+            conversations and interviews, this reflection will be helpful to leverage. The narrative you&apos;re building about
+            why a particular path fits you needs to be consistent, authentic, and compelling. This exercise serves as the
+            foundation for pulling this together. You&apos;ll refine this raw material in future modules.
           </p>
         </div>
 
         <div className="flex flex-col gap-4 rounded-xl border bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-sm font-semibold text-slate-800">Download Transcript</p>
-            <p className="text-xs text-muted-foreground">
-              Click to save a copy of the full transcript from all six prompts.
-            </p>
+            <p className="text-sm font-semibold text-slate-800">Don&apos;t Exit Before Downloading and Saving Your Transcript</p>
+            <p className="text-xs text-muted-foreground">This conversation contains insights you&apos;ll need as you move forward.</p>
           </div>
           <Button
             variant="default"

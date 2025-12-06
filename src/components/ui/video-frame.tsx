@@ -16,14 +16,17 @@ export function VideoFrame({ title, description }: VideoFrameProps) {
         <div className="space-y-2">
           <h2 className="text-lg font-semibold text-[#0f1729]">Instructions</h2>
           <div className="text-sm text-muted-foreground leading-relaxed space-y-2">
-            <p>Complete 6 reflection questions, each following the same three-step process:</p>
-            <ul className="list-disc space-y-1 pl-5">
-              <li><span className="font-semibold">Prep</span> - Review the prompt and jot a quick outline.</li>
-              <li><span className="font-semibold">Write Answer</span> - Enter your response in text; the AI will give a brief follow-up prompt.</li>
-              <li><span className="font-semibold">Scoring & Feedback</span> - Submit to see detailed scores and targeted strengths/weaknesses.</li>
-            </ul>
             <p>
-              After completing all questions, you will see a summary of your performance. Come back and practice multiple times to build momentum.
+              Engage in a guided conversation with an AI expert on acquisitions careers. It&apos;s important that you:
+            </p>
+            <ol className="list-decimal space-y-1 pl-5">
+              <li>Be thorough and honest. The quality of insights you get depends on the quality of reflection you put in.</li>
+              <li>Take your time. Some questions deserve careful consideration.</li>
+              <li>Expect to be challenged. The AI will probe deeper when responses are vague or reveal misunderstandings.</li>
+              <li>Ask questions. Use this as an opportunity to clarify anything about the career path.</li>
+            </ol>
+            <p>
+              This is a judgment-free space designed to give you clarity. Whether you walk away more confident in pursuing this path or decide it&apos;s not the right fit, that&apos;s a win. Better to know now than after investing months in the wrong direction.
             </p>
           </div>
         </div>
