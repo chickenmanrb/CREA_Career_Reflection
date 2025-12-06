@@ -349,8 +349,8 @@ export function StepRenderer({
 
         <div className="flex flex-col gap-4 rounded-xl border bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-base font-semibold text-slate-800">Don&apos;t Exit Before Downloading and Saving Your Transcript</p>
-            <p className="text-sm text-muted-foreground">This conversation contains insights you&apos;ll need as you move forward.</p>
+            <p className="text-2xl font-semibold text-slate-800">Don&apos;t Exit Before Downloading and Saving Your Transcript</p>
+            <p className="text-base text-muted-foreground">This conversation contains insights you&apos;ll need as you move forward.</p>
           </div>
           <Button
             variant="default"

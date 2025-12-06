@@ -47,5 +47,6 @@ describe("StepRenderer finish", () => {
     expect(html).toContain("text-2xl");
     expect(html).not.toContain("text-3xl");
     expect(html).not.toContain("text-xs");
+    expect(html).toContain("text-base text-muted-foreground");
   });
 });
