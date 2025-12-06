@@ -332,7 +332,8 @@ export function StepRenderer({
     return (
       <div className="space-y-6">
         <div className="rounded-xl border bg-gradient-to-br from-slate-50 via-white to-slate-100 p-6 shadow-sm">
-          <h2 className="text-3xl font-semibold text-[#0f1729]">Congratulations on Completing Your Career Path Reflection</h2>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Reflection complete</p>
+          <h2 className="mt-2 text-2xl font-semibold text-[#0f1729]">Congratulations on Completing Your Career Path Reflection</h2>
           <p className="mt-3 text-base text-slate-700 leading-relaxed">
             You&apos;ve just completed one of the most important exercises in career planning that most people skip entirely.
             By honestly assessing your fit, you&apos;re already ahead of candidates who chase roles without understanding what
@@ -348,8 +349,8 @@ export function StepRenderer({
 
         <div className="flex flex-col gap-4 rounded-xl border bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-sm font-semibold text-slate-800">Don&apos;t Exit Before Downloading and Saving Your Transcript</p>
-            <p className="text-xs text-muted-foreground">This conversation contains insights you&apos;ll need as you move forward.</p>
+            <p className="text-base font-semibold text-slate-800">Don&apos;t Exit Before Downloading and Saving Your Transcript</p>
+            <p className="text-sm text-muted-foreground">This conversation contains insights you&apos;ll need as you move forward.</p>
           </div>
           <Button
             variant="default"
