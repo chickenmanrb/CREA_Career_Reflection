@@ -112,7 +112,6 @@ export function StepRenderer({
         setCallState("connecting");
       } else if (status === "connected") {
         setCallState("connected");
-        setIsAwaitingReply(false);
       } else {
         setCallState("disconnected");
         setIsAwaitingReply(false);
@@ -139,10 +138,12 @@ export function StepRenderer({
         signedUrl,
         connectionType: "websocket",
       });
+      setIsAwaitingReply(true);
     } catch (error) {
       const message = messageFromError(error, "Unable to reach the reflection coach.");
       setSendError(message);
       setCallState("disconnected");
+      setIsAwaitingReply(false);
     } finally {
       setIsStarting(false);
     }
