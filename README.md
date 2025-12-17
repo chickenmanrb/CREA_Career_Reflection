@@ -3,6 +3,7 @@
 Two parallel exercises with identical UI/UX:
 - Acquisitions: `/acquisitions`
 - Asset Management: `/asset-management`
+- Development: `/development`
 
 ## Setup
 1. Install dependencies:
@@ -15,6 +16,7 @@ Two parallel exercises with identical UI/UX:
    - ElevenLabs agent IDs:
      - Acquisitions: `NEXT_PUBLIC_ACQUISITION_AGENT_ID` + `NEXT_PUBLIC_ACQUISITION_AGENT_2_ID` ... `_6_ID`
      - Asset Management: `NEXT_PUBLIC_ASSET_MANAGEMENT_AGENT_ID` + `NEXT_PUBLIC_ASSET_MANAGEMENT_AGENT_2_ID` ... `_6_ID`
+     - Development: `NEXT_PUBLIC_DEVELOPMENT_AGENT_ID` + `NEXT_PUBLIC_DEVELOPMENT_AGENT_2_ID` ... `_6_ID`
 3. Start the dev server:
    ```bash
    npm run dev

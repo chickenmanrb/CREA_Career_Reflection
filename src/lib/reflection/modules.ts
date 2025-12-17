@@ -1,4 +1,4 @@
-export type ReflectionModuleId = "acquisitions" | "asset-management";
+export type ReflectionModuleId = "acquisitions" | "asset-management" | "development";
 
 export type ReflectionModule = {
   id: ReflectionModuleId;
@@ -58,6 +58,26 @@ export const REFLECTION_MODULES: Record<ReflectionModuleId, ReflectionModule> = 
       "agent_7001kb18jpckevg876ah1m4472hc",
     ],
   },
+  development: {
+    id: "development",
+    slug: "development",
+    exercise: "development",
+    storagePrefix: "development",
+    title: "Development Career Pathway Reflection",
+    transcriptTitle: "Development Career Pathway Reflection Transcript",
+    transcriptFilenamePrefix: "development-reflection-transcript",
+    signedUrlEndpoint: "/api/development/coach/signed-url",
+    sessionEndpoint: "/api/development/session",
+    agentEnvBase: "NEXT_PUBLIC_DEVELOPMENT_AGENT",
+    fallbackAgentIds: [
+      "agent_9301kb17m8qafjz81fzh3xed32gw",
+      "agent_3001kb17yts2ez6tmp7h6yczfeej",
+      "agent_4101kb18epgrfpd8fthhywkwc5vh",
+      "agent_2101kb18g7gtesyv4319ybbppf6y",
+      "agent_4301kb18hc1mfvz9qwrw5k5acnry",
+      "agent_7001kb18jpckevg876ah1m4472hc",
+    ],
+  },
 };
 
 export function getReflectionModule(id: ReflectionModuleId): ReflectionModule {
@@ -72,4 +92,3 @@ export function getReflectionModuleBySlug(slug: string): ReflectionModule | null
   const match = listReflectionModules().find((m) => m.slug === slug);
   return match ?? null;
 }
-
