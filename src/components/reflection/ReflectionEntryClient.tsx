@@ -3,20 +3,26 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import type { ReflectionModule } from "@/lib/reflection/modules";
+
 function getInitial(key: string) {
   if (typeof window === "undefined") return "";
   return localStorage.getItem(key) ?? "";
 }
 
-const STORAGE_KEYS = {
-  name: "crea_asset_management_candidate_name",
-  email: "crea_asset_management_candidate_email",
-} as const;
+function storageKeys(storagePrefix: string) {
+  return {
+    name: `crea_${storagePrefix}_candidate_name`,
+    email: `crea_${storagePrefix}_candidate_email`,
+  } as const;
+}
 
-export default function AssetManagementEntryPage() {
+export function ReflectionEntryClient({ module }: { module: ReflectionModule }) {
   const router = useRouter();
-  const [name, setName] = useState(() => getInitial(STORAGE_KEYS.name));
-  const [email, setEmail] = useState(() => getInitial(STORAGE_KEYS.email));
+  const keys = storageKeys(module.storagePrefix);
+
+  const [name, setName] = useState(() => getInitial(keys.name));
+  const [email, setEmail] = useState(() => getInitial(keys.email));
 
   const isEmailValid = email.trim().length > 3 && email.includes("@");
   const isNameValid = name.trim().length > 1;
@@ -26,10 +32,10 @@ export default function AssetManagementEntryPage() {
     e.preventDefault();
     if (!canStart) return;
     if (typeof window !== "undefined") {
-      localStorage.setItem(STORAGE_KEYS.name, name.trim());
-      localStorage.setItem(STORAGE_KEYS.email, email.trim());
+      localStorage.setItem(keys.name, name.trim());
+      localStorage.setItem(keys.email, email.trim());
     }
-    router.push("/asset-management/interview");
+    router.push(`/${module.slug}/interview`);
   };
 
   return (
@@ -37,7 +43,7 @@ export default function AssetManagementEntryPage() {
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-md">
         <div className="grid gap-6 md:grid-cols-[1.3fr_1fr]">
           <div className="space-y-3">
-            <h1 className="text-2xl font-semibold text-slate-900">Asset Management Career Pathway Reflection</h1>
+            <h1 className="text-2xl font-semibold text-slate-900">{module.title}</h1>
             <p className="text-slate-600 text-sm">
               Work through six reflection prompts and get tailored feedback on clarity, specificity, and alignment to your goals. The flow is fully text-based—write, get a brief AI follow-up, then score your responses to see strengths and gaps.
             </p>

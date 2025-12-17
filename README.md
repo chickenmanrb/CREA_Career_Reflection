@@ -24,14 +24,14 @@ Two parallel exercises with identical UI/UX:
 > Scoring is not wired. Transcripts are saved on the Finish step.
 
 ## What's inside
-- `src/app/acquisitions/page.tsx` — Acquisitions entry gate.
-- `src/app/acquisitions/interview/page.tsx` — Acquisitions reflection UI flow.
-- `src/app/asset-management/page.tsx` — Asset Management entry gate.
-- `src/app/asset-management/interview/page.tsx` — Asset Management reflection UI flow.
+- `src/app/(reflections)/[module]/page.tsx` — module entry gate (e.g. `/acquisitions`, `/asset-management`).
+- `src/app/(reflections)/[module]/interview/page.tsx` — module reflection UI flow.
+- `src/app/(reflections)/[module]/layout.tsx` — per-module metadata + validation.
 - `src/components/interview/StepRenderer.tsx` — handles the start/end controls, textarea, and transcript toggle.
 - `src/components/interview/Transcript.tsx` — renders the ElevenLabs Conversation UI with the transcript.
 - `src/components/layout/LeftNav.tsx` — flat navigation showing progress through the six prompts.
-- `src/lib/flow-config-acquisitions.ts` — Acquisitions flow + agent IDs.
-- `src/lib/flow-config-asset-management.ts` — Asset Management flow + agent IDs.
+- `src/lib/reflection/modules.ts` — module registry (titles, slugs, endpoints).
+- `src/lib/reflection/flow-config.ts` — shared flow builder.
+- `src/lib/reflection/question-key.ts` — shared question key helper.
 - `src/app/api/acquisitions/coach/signed-url/route.ts` — signed URL for Acquisitions agents (bulkheaded).
 - `src/app/api/asset-management/coach/signed-url/route.ts` — signed URL for Asset Management agents (bulkheaded).

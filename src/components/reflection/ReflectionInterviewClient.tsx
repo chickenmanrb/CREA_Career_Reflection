@@ -7,26 +7,13 @@ import { AlertCircle } from "lucide-react";
 import { StepRenderer } from "@/components/interview/StepRenderer";
 import { LeftNav } from "@/components/layout/LeftNav";
 import { Card, CardContent } from "@/components/ui/card";
-import { assetManagementFlowConfig } from "@/lib/flow-config-asset-management";
+import type { ReflectionModule } from "@/lib/reflection/modules";
+import { resolveAgentIds } from "@/lib/reflection/agents";
+import { buildReflectionFlowConfig } from "@/lib/reflection/flow-config";
+import { questionKeyFromStepId } from "@/lib/reflection/question-key";
 import type { QuestionKey, TranscriptMessage } from "@/types/interview";
 
-function questionKeyFromStepId(stepId: string): QuestionKey | undefined {
-  const match = stepId.match(/^q(\d)-/);
-  if (!match) return undefined;
-  const num = match[1];
-  if (num === "1") return "q1_attracts";
-  if (num === "2") return "q2_concerns";
-  if (num === "3") return "q3_questions";
-  if (num === "4") return "q4_direct_skills";
-  if (num === "5") return "q5_improve_skills";
-  if (num === "6") return "q6_connect";
-  return undefined;
-}
-
-const STORAGE_KEYS = {
-  name: "crea_asset_management_candidate_name",
-  email: "crea_asset_management_candidate_email",
-} as const;
+const CRE_ANALYST_HOST = "creanalyst.com";
 
 type PersistState =
   | { status: "idle" }
@@ -34,12 +21,22 @@ type PersistState =
   | { status: "saved"; id: string }
   | { status: "error"; error: string };
 
-export default function AssetManagementInterviewPage() {
+function storageKeys(storagePrefix: string) {
+  return {
+    name: `crea_${storagePrefix}_candidate_name`,
+    email: `crea_${storagePrefix}_candidate_email`,
+  } as const;
+}
+
+export function ReflectionInterviewClient({ module }: { module: ReflectionModule }) {
+  const agentIds = useMemo(() => resolveAgentIds(module), [module]);
+  const flowConfig = useMemo(() => buildReflectionFlowConfig(agentIds), [agentIds]);
+
   const [messages, setMessages] = useState<TranscriptMessage[]>([]);
-  const [currentStepId, setCurrentStepId] = useState<string>(assetManagementFlowConfig.steps[0]?.id ?? "");
+  const [currentStepId, setCurrentStepId] = useState<string>(flowConfig.steps[0]?.id ?? "");
   const [persistState, setPersistState] = useState<PersistState>({ status: "idle" });
 
-  const agentConfigured = assetManagementFlowConfig.steps.some((s) => s.type === "agent" && s.agentId && s.agentId.length > 0);
+  const agentConfigured = flowConfig.steps.some((s) => s.type === "agent" && s.agentId && s.agentId.length > 0);
 
   const handleMessage = useCallback(
     (payload: {
@@ -66,8 +63,8 @@ export default function AssetManagementInterviewPage() {
   );
 
   const currentStep = useMemo(
-    () => assetManagementFlowConfig.steps.find((s) => s.id === currentStepId) ?? assetManagementFlowConfig.steps[0],
-    [currentStepId]
+    () => flowConfig.steps.find((s) => s.id === currentStepId) ?? flowConfig.steps[0],
+    [currentStepId, flowConfig.steps]
   );
 
   const messagesForCurrentStep = useMemo(
@@ -86,7 +83,7 @@ export default function AssetManagementInterviewPage() {
     let lastStepId: string | undefined;
     messages.forEach((msg) => {
       if (msg.stepId && msg.stepId !== lastStepId) {
-        const stepMeta = assetManagementFlowConfig.steps.find((s) => s.id === msg.stepId);
+        const stepMeta = flowConfig.steps.find((s) => s.id === msg.stepId);
         if (stepMeta) {
           lines.push(`--- ${stepMeta.questionText ?? stepMeta.title} ---`);
         }
@@ -97,30 +94,25 @@ export default function AssetManagementInterviewPage() {
       lines.push(`${speaker}: ${msg.message}`);
     });
 
-    const payload = [
-      "Asset Management Career Pathway Reflection Transcript",
-      `Generated: ${new Date().toLocaleString()}`,
-      "",
-      ...lines,
-    ].join("\n");
+    const payload = [module.transcriptTitle, `Generated: ${new Date().toLocaleString()}`, "", ...lines].join("\n");
 
     const blob = new Blob([payload], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = `asset-management-reflection-transcript-${new Date().toISOString().replace(/[:.]/g, "-")}.txt`;
+    anchor.download = `${module.transcriptFilenamePrefix}-${new Date().toISOString().replace(/[:.]/g, "-")}.txt`;
     anchor.click();
     URL.revokeObjectURL(url);
-  }, [messages]);
+  }, [flowConfig.steps, messages, module.transcriptFilenamePrefix, module.transcriptTitle]);
 
-  const promptSteps = useMemo(() => assetManagementFlowConfig.steps.filter((s) => s.type === "agent"), []);
+  const promptSteps = useMemo(() => flowConfig.steps.filter((s) => s.type === "agent"), [flowConfig.steps]);
   const currentPromptNumber = useMemo(() => {
     const match = currentStepId.match(/^q(\d)-/);
     return match ? Number(match[1]) : null;
   }, [currentStepId]);
   const totalPrompts = promptSteps.length;
 
-  const stepsForNav = useMemo(() => assetManagementFlowConfig.steps, []);
+  const stepsForNav = useMemo(() => flowConfig.steps, [flowConfig.steps]);
   const currentIdx = Math.max(0, stepsForNav.findIndex((s) => s.id === currentStepId));
   const goPrev = () => {
     if (currentIdx > 0) setCurrentStepId(stepsForNav[currentIdx - 1].id);
@@ -134,12 +126,13 @@ export default function AssetManagementInterviewPage() {
     if (persistState.status === "saving") return;
     if (messages.length === 0) return;
 
-    const candidateName = typeof window === "undefined" ? undefined : (localStorage.getItem(STORAGE_KEYS.name) ?? undefined);
-    const candidateEmail = typeof window === "undefined" ? undefined : (localStorage.getItem(STORAGE_KEYS.email) ?? undefined);
+    const keys = storageKeys(module.storagePrefix);
+    const candidateName = typeof window === "undefined" ? undefined : (localStorage.getItem(keys.name) ?? undefined);
+    const candidateEmail = typeof window === "undefined" ? undefined : (localStorage.getItem(keys.email) ?? undefined);
 
     setPersistState({ status: "saving" });
     try {
-      const response = await fetch("/api/asset-management/session", {
+      const response = await fetch(module.sessionEndpoint, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ candidateName, candidateEmail, transcript: messages }),
@@ -153,7 +146,7 @@ export default function AssetManagementInterviewPage() {
       const message = error instanceof Error ? error.message : "Unable to save transcript.";
       setPersistState({ status: "error", error: message });
     }
-  }, [messages, persistState.status]);
+  }, [messages, module.sessionEndpoint, module.storagePrefix, persistState.status]);
 
   useEffect(() => {
     if (currentStep?.type !== "finish") return;
@@ -167,22 +160,17 @@ export default function AssetManagementInterviewPage() {
       <header className="flex items-center justify-between bg-[#0f1729] px-5 py-3 text-white shadow">
         <div className="flex items-center gap-3">
           <Image src="/assets/CRE logo.webp" alt="CRE Analyst" width={120} height={32} className="h-8 w-auto" />
-          <div className="text-sm font-semibold tracking-wide">Asset Management Career Pathway Reflection</div>
+          <div className="text-sm font-semibold tracking-wide">{module.title}</div>
         </div>
-        <div className="text-xs font-semibold text-white/80">creanalyst.com</div>
+        <div className="text-xs font-semibold text-white/80">{CRE_ANALYST_HOST}</div>
       </header>
 
       <div className="flex min-h-[calc(100vh-56px)]">
-        <LeftNav
-          steps={stepsForNav}
-          currentId={currentStep.id}
-          onSelect={setCurrentStepId}
-          title="Asset Management Career Pathway Reflection"
-        />
+        <LeftNav steps={stepsForNav} currentId={currentStep.id} onSelect={setCurrentStepId} title={module.title} />
         <main className="flex flex-1 flex-col overflow-y-auto px-6 py-8 md:px-8 md:py-10">
           <div className="mb-6 flex items-center justify-between gap-4">
             <div className="space-y-2">
-              <h1 className="text-3xl font-semibold">Asset Management Career Pathway Reflection</h1>
+              <h1 className="text-3xl font-semibold">{module.title}</h1>
             </div>
             <div className="flex items-center gap-3 text-xs text-muted-foreground">
               <div className="flex items-center gap-2">
@@ -227,7 +215,7 @@ export default function AssetManagementInterviewPage() {
                 onClear={clearCurrentStep}
                 onAdvance={goNext}
                 onDownloadTranscript={downloadTranscript}
-                signedUrlEndpoint="/api/asset-management/coach/signed-url"
+                signedUrlEndpoint={module.signedUrlEndpoint}
                 persistState={persistState}
                 onRetryPersist={persistTranscript}
               />
@@ -238,3 +226,4 @@ export default function AssetManagementInterviewPage() {
     </div>
   );
 }
+

@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 
 import { fetchSignedUrl } from "@/lib/elevenlabs";
-import { acquisitionsFlowConfig } from "@/lib/flow-config-acquisitions";
+import { getReflectionModule } from "@/lib/reflection/modules";
+import { resolveAgentIds } from "@/lib/reflection/agents";
 
 function allowedAgentIds() {
-  return acquisitionsFlowConfig.steps
-    .filter((s) => s.type === "agent")
-    .map((s) => s.agentId)
-    .filter((id): id is string => typeof id === "string" && id.trim().length > 0);
+  const moduleConfig = getReflectionModule("acquisitions");
+  return resolveAgentIds(moduleConfig).filter((id) => id.trim().length > 0);
 }
 
 export async function GET(req: Request) {
@@ -35,4 +34,3 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Unable to fetch signed URL" }, { status: 500 });
   }
 }
-
