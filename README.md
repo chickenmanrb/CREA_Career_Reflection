@@ -13,7 +13,7 @@ Two parallel exercises with identical UI/UX:
    - `ELEVENLABS_API_KEY`
    - Supabase persistence: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`
    - ElevenLabs agent IDs:
-     - Acquisitions: `NEXT_PUBLIC_ELEVENLABS_AGENT_ID` + `NEXT_PUBLIC_ELEVENLABS_AGENT_2_ID` ... `_6_ID`
+     - Acquisitions: `NEXT_PUBLIC_ACQUISITION_AGENT_ID` + `NEXT_PUBLIC_ACQUISITION_AGENT_2_ID` ... `_6_ID`
      - Asset Management: `NEXT_PUBLIC_ELEVENLABS_ASSET_MANAGEMENT_AGENT_ID` + `..._2_ID` ... `_6_ID`
 3. Start the dev server:
    ```bash
