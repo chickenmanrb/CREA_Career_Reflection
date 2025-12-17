@@ -173,7 +173,12 @@ export default function AssetManagementInterviewPage() {
       </header>
 
       <div className="flex min-h-[calc(100vh-56px)]">
-        <LeftNav steps={stepsForNav} currentId={currentStep.id} onSelect={setCurrentStepId} />
+        <LeftNav
+          steps={stepsForNav}
+          currentId={currentStep.id}
+          onSelect={setCurrentStepId}
+          title="Asset Management Career Pathway Reflection"
+        />
         <main className="flex flex-1 flex-col overflow-y-auto px-6 py-8 md:px-8 md:py-10">
           <div className="mb-6 flex items-center justify-between gap-4">
             <div className="space-y-2">
