@@ -26,3 +26,4 @@
 2025-12-17: Added Lending module to the reflection registry with bulkheaded ElevenLabs and session endpoints.
 2025-12-17: Added Consulting module to the reflection registry with bulkheaded ElevenLabs and session endpoints.
 2025-12-17: Updated Next.js/React and Netlify Next.js plugin to satisfy Netlify deploy blocks for CVE-2025-55182.
+2025-12-17: Added REFLECTION_AGENT_IDS_JSON support to reduce Netlify/AWS Lambda env var size pressure while keeping per-module agent allowlisting.
