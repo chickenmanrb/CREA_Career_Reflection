@@ -23,3 +23,4 @@
 2025-12-17: Refactored reflection pages into a module registry + shared entry/interview clients with a dynamic /[module] route, and centralized flow config + question-key helpers to avoid copy/paste drift as new modules are added.
 2025-12-17: Added Development module to the reflection registry with bulkheaded ElevenLabs and session endpoints.
 2025-12-17: Added Brokerage module to the reflection registry with bulkheaded ElevenLabs and session endpoints.
+2025-12-17: Added Lending module to the reflection registry with bulkheaded ElevenLabs and session endpoints.
