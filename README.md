@@ -1,25 +1,37 @@
-# Acquisitions Career Pathway Reflection (Text-Only)
+# Career Reflections (Text-Only)
 
-Six prompts, quick AI follow-ups, and a clean transcript for each written reflection. The experience is entirely text-based: you open `/interview`, start the response, and the ElevenLabs conversational coach replies with one-nudge guidance at a time.
+Two parallel exercises with identical UI/UX:
+- Acquisitions: `/acquisitions`
+- Asset Management: `/asset-management`
 
 ## Setup
 1. Install dependencies:
    ```bash
    npm install
    ```
-2. Copy `.env.example` to `.env.local` and set `ELEVENLABS_API_KEY` (the backend route calls the ElevenLabs ConvAI chat endpoint).
+2. Create `.env.local` (or `.env`) and set:
+   - `ELEVENLABS_API_KEY`
+   - Supabase persistence: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`
+   - ElevenLabs agent IDs:
+     - Acquisitions: `NEXT_PUBLIC_ELEVENLABS_AGENT_ID` + `NEXT_PUBLIC_ELEVENLABS_AGENT_2_ID` ... `_6_ID`
+     - Asset Management: `NEXT_PUBLIC_ELEVENLABS_ASSET_MANAGEMENT_AGENT_ID` + `..._2_ID` ... `_6_ID`
 3. Start the dev server:
    ```bash
    npm run dev
    ```
-   Open http://localhost:3000 and visit `/interview`.
+   Open http://localhost:3000 and visit `/acquisitions` or `/asset-management`.
 
-> There is no scoring loop or Supabase persistence anymore—just six text prompts and a guided chat transcript.
+> Scoring is not wired. Transcripts are saved on the Finish step.
 
 ## What's inside
-- `src/app/interview/page.tsx` — main landing+prompt layout with the left navigation panel.
+- `src/app/acquisitions/page.tsx` — Acquisitions entry gate.
+- `src/app/acquisitions/interview/page.tsx` — Acquisitions reflection UI flow.
+- `src/app/asset-management/page.tsx` — Asset Management entry gate.
+- `src/app/asset-management/interview/page.tsx` — Asset Management reflection UI flow.
 - `src/components/interview/StepRenderer.tsx` — handles the start/end controls, textarea, and transcript toggle.
 - `src/components/interview/Transcript.tsx` — renders the ElevenLabs Conversation UI with the transcript.
 - `src/components/layout/LeftNav.tsx` — flat navigation showing progress through the six prompts.
-- `src/lib/flow-config.ts` — prompt metadata plus optional agent IDs.
-- `src/app/api/coach/signed-url/route.ts` — returns a signed WebSocket URL that the client uses to start the ElevenLabs conversation.
+- `src/lib/flow-config-acquisitions.ts` — Acquisitions flow + agent IDs.
+- `src/lib/flow-config-asset-management.ts` — Asset Management flow + agent IDs.
+- `src/app/api/acquisitions/coach/signed-url/route.ts` — signed URL for Acquisitions agents (bulkheaded).
+- `src/app/api/asset-management/coach/signed-url/route.ts` — signed URL for Asset Management agents (bulkheaded).

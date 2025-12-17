@@ -222,6 +222,7 @@ export default function AcquisitionsInterviewPage() {
                 onClear={clearCurrentStep}
                 onAdvance={goNext}
                 onDownloadTranscript={downloadTranscript}
+                signedUrlEndpoint="/api/acquisitions/coach/signed-url"
                 persistState={persistState}
                 onRetryPersist={persistTranscript}
               />
@@ -232,4 +233,3 @@ export default function AcquisitionsInterviewPage() {
     </div>
   );
 }
-

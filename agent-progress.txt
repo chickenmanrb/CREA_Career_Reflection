@@ -18,3 +18,4 @@
 2025-12-06: Matched finish screen heading/body sizes and expanded vitest guard for typography.
 2025-12-17: Bulkheaded the reflection into two parallel flows at /acquisitions and /asset-management, added separate session persistence endpoints and an asset_management Supabase migration, and changed npm test to run non-interactively.
 2025-12-17: Simplified persistence to a single reflection_sessions table with an exercise discriminator and removed the unused asset_management table in Supabase.
+2025-12-17: Bulkheaded ElevenLabs signed-url calls per module by adding dedicated endpoints and separate env-driven agent ID sets for Acquisitions vs Asset Management.

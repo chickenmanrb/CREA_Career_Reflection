@@ -222,6 +222,7 @@ export default function AssetManagementInterviewPage() {
                 onClear={clearCurrentStep}
                 onAdvance={goNext}
                 onDownloadTranscript={downloadTranscript}
+                signedUrlEndpoint="/api/asset-management/coach/signed-url"
                 persistState={persistState}
                 onRetryPersist={persistTranscript}
               />
@@ -232,4 +233,3 @@ export default function AssetManagementInterviewPage() {
     </div>
   );
 }
-

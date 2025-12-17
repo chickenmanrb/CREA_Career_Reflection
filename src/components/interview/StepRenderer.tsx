@@ -38,6 +38,7 @@ type StepRendererProps = {
   onAdvance: () => void;
   onDownloadTranscript?: () => void;
   allMessages?: TranscriptMessage[];
+  signedUrlEndpoint?: string;
   persistState?:
     | { status: "idle" }
     | { status: "saving" }
@@ -46,8 +47,8 @@ type StepRendererProps = {
   onRetryPersist?: () => void;
 };
 
-async function requestSignedUrl(agentId: string) {
-  const response = await fetch(`/api/coach/signed-url?agentId=${encodeURIComponent(agentId)}`);
+async function requestSignedUrl(agentId: string, endpoint: string) {
+  const response = await fetch(`${endpoint}?agentId=${encodeURIComponent(agentId)}`);
   if (!response.ok) {
     const body = await response.text().catch(() => response.statusText);
     throw new Error(`Failed to get signed URL (${response.status}): ${body}`);
@@ -85,6 +86,7 @@ export function StepRenderer({
   onAdvance,
   onDownloadTranscript,
   allMessages,
+  signedUrlEndpoint,
   persistState,
   onRetryPersist,
 }: StepRendererProps) {
@@ -141,7 +143,8 @@ export function StepRenderer({
     setIsAwaitingReply(false);
 
     try {
-      const signedUrl = await requestSignedUrl(step.agentId);
+      const endpoint = signedUrlEndpoint ?? "/api/coach/signed-url";
+      const signedUrl = await requestSignedUrl(step.agentId, endpoint);
       await conversation.startSession({
         signedUrl,
         connectionType: "websocket",
@@ -155,7 +158,7 @@ export function StepRenderer({
     } finally {
       setIsStarting(false);
     }
-  }, [conversation, step.agentId]);
+  }, [conversation, signedUrlEndpoint, step.agentId]);
 
   const endConversation = useCallback(() => {
     conversation.endSession();
