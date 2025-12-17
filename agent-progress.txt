@@ -16,3 +16,4 @@
 2025-12-06: Added animated “thinking” indicator while the coach prepares a reply.
 2025-12-06: Normalized finish step typography and added a vitest check to keep the type scale consistent.
 2025-12-06: Matched finish screen heading/body sizes and expanded vitest guard for typography.
+2025-12-17: Bulkheaded the reflection into two parallel flows at /acquisitions and /asset-management, added separate session persistence endpoints and an asset_management Supabase migration, and changed npm test to run non-interactively.

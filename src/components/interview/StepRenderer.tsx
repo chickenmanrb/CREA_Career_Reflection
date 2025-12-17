@@ -38,6 +38,12 @@ type StepRendererProps = {
   onAdvance: () => void;
   onDownloadTranscript?: () => void;
   allMessages?: TranscriptMessage[];
+  persistState?:
+    | { status: "idle" }
+    | { status: "saving" }
+    | { status: "saved"; id?: string }
+    | { status: "error"; error: string };
+  onRetryPersist?: () => void;
 };
 
 async function requestSignedUrl(agentId: string) {
@@ -79,6 +85,8 @@ export function StepRenderer({
   onAdvance,
   onDownloadTranscript,
   allMessages,
+  persistState,
+  onRetryPersist,
 }: StepRendererProps) {
   const [textInput, setTextInput] = useState("");
   const [sendError, setSendError] = useState<string | null>(null);
@@ -319,7 +327,7 @@ export function StepRenderer({
           <button onClick={onClear} className="rounded-full border px-4 py-2 text-sm" disabled={messages.length === 0}>
             Clear transcript
           </button>
-          <span>Conversation history is local—keep writing until you feel confident.</span>
+          <span>Conversation history is saved when you finish—keep writing until you feel confident.</span>
         </div>
       </div>
     );
@@ -351,6 +359,22 @@ export function StepRenderer({
           <div>
             <p className="text-2xl font-semibold text-slate-800">Don&apos;t Exit Before Downloading and Saving Your Transcript</p>
             <p className="text-base text-muted-foreground">This conversation contains insights you&apos;ll need as you move forward.</p>
+            {persistState?.status === "saving" && (
+              <p className="mt-2 text-sm text-slate-600">Saving transcript...</p>
+            )}
+            {persistState?.status === "saved" && (
+              <p className="mt-2 text-sm text-emerald-700">Transcript saved.</p>
+            )}
+            {persistState?.status === "error" && (
+              <div className="mt-2 text-sm text-rose-700">
+                <div>Could not save transcript: {persistState.error}</div>
+                {onRetryPersist && (
+                  <button onClick={onRetryPersist} className="mt-2 rounded-full border px-4 py-2 text-sm font-semibold hover:bg-muted">
+                    Retry save
+                  </button>
+                )}
+              </div>
+            )}
           </div>
           <Button
             variant="default"
