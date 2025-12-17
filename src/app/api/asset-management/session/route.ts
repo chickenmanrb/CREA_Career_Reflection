@@ -8,8 +8,9 @@ export async function POST(request: Request) {
     const body = persistSessionBodySchema.parse(json);
 
     const data = await persistReflectionSession({
-      table: "asset_management",
+      table: "reflection_sessions",
       agentId: "asset_management",
+      exercise: "asset_management",
       body,
     });
 
@@ -19,4 +20,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: message }, { status: 400 });
   }
 }
-

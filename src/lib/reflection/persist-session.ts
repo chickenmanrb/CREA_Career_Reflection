@@ -22,13 +22,15 @@ export type PersistSessionBody = z.infer<typeof persistSessionBodySchema>;
 export async function persistReflectionSession(params: {
   table: string;
   agentId: string;
+  exercise?: string;
   body: PersistSessionBody;
 }) {
   const supabase = getSupabaseAdmin();
-  const { table, agentId, body } = params;
+  const { table, agentId, body, exercise } = params;
 
   const insertPayload = {
     agent_id: agentId,
+    ...(exercise ? { exercise } : {}),
     candidate_name: body.candidateName ?? null,
     candidate_email: body.candidateEmail ?? null,
     transcript: body.transcript,
@@ -38,4 +40,3 @@ export async function persistReflectionSession(params: {
   if (error) throw error;
   return data;
 }
-
