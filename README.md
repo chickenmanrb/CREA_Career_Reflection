@@ -1,25 +1,45 @@
-# Acquisitions Career Pathway Reflection (Text-Only)
+# Career Reflections (Text-Only)
 
-Six prompts, quick AI follow-ups, and a clean transcript for each written reflection. The experience is entirely text-based: you open `/interview`, start the response, and the ElevenLabs conversational coach replies with one-nudge guidance at a time.
+Two parallel exercises with identical UI/UX:
+- Acquisitions: `/acquisitions`
+- Asset Management: `/asset-management`
+- Development: `/development`
+- Brokerage: `/brokerage`
+- Lending: `/lending`
+- Consulting: `/consulting`
 
 ## Setup
 1. Install dependencies:
    ```bash
    npm install
    ```
-2. Copy `.env.example` to `.env.local` and set `ELEVENLABS_API_KEY` (the backend route calls the ElevenLabs ConvAI chat endpoint).
+2. Create `.env.local` (or `.env`) and set:
+   - `ELEVENLABS_API_KEY`
+   - Supabase persistence: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`
+   - ElevenLabs agent IDs:
+     - Acquisitions: `NEXT_PUBLIC_ACQUISITION_AGENT_ID` + `NEXT_PUBLIC_ACQUISITION_AGENT_2_ID` ... `_6_ID`
+     - Asset Management: `NEXT_PUBLIC_ASSET_MANAGEMENT_AGENT_ID` + `NEXT_PUBLIC_ASSET_MANAGEMENT_AGENT_2_ID` ... `_6_ID`
+     - Development: `NEXT_PUBLIC_DEVELOPMENT_AGENT_ID` + `NEXT_PUBLIC_DEVELOPMENT_AGENT_2_ID` ... `_6_ID`
+     - Brokerage: `NEXT_PUBLIC_BROKERAGE_AGENT_ID` + `NEXT_PUBLIC_BROKERAGE_AGENT_2_ID` ... `_6_ID`
+     - Lending: `NEXT_PUBLIC_LENDING_AGENT_ID` + `NEXT_PUBLIC_LENDING_AGENT_2_ID` ... `_6_ID`
+     - Consulting: `NEXT_PUBLIC_CONSULTING_AGENT_ID` + `NEXT_PUBLIC_CONSULTING_AGENT_2_ID` ... `_6_ID`
 3. Start the dev server:
    ```bash
    npm run dev
    ```
-   Open http://localhost:3000 and visit `/interview`.
+   Open http://localhost:3000 and visit `/acquisitions` or `/asset-management`.
 
-> There is no scoring loop or Supabase persistence anymore—just six text prompts and a guided chat transcript.
+> Scoring is not wired. Transcripts are saved on the Finish step.
 
 ## What's inside
-- `src/app/interview/page.tsx` — main landing+prompt layout with the left navigation panel.
+- `src/app/(reflections)/[module]/page.tsx` — module entry gate (e.g. `/acquisitions`, `/asset-management`).
+- `src/app/(reflections)/[module]/interview/page.tsx` — module reflection UI flow.
+- `src/app/(reflections)/[module]/layout.tsx` — per-module metadata + validation.
 - `src/components/interview/StepRenderer.tsx` — handles the start/end controls, textarea, and transcript toggle.
 - `src/components/interview/Transcript.tsx` — renders the ElevenLabs Conversation UI with the transcript.
 - `src/components/layout/LeftNav.tsx` — flat navigation showing progress through the six prompts.
-- `src/lib/flow-config.ts` — prompt metadata plus optional agent IDs.
-- `src/app/api/coach/signed-url/route.ts` — returns a signed WebSocket URL that the client uses to start the ElevenLabs conversation.
+- `src/lib/reflection/modules.ts` — module registry (titles, slugs, endpoints).
+- `src/lib/reflection/flow-config.ts` — shared flow builder.
+- `src/lib/reflection/question-key.ts` — shared question key helper.
+- `src/app/api/acquisitions/coach/signed-url/route.ts` — signed URL for Acquisitions agents (bulkheaded).
+- `src/app/api/asset-management/coach/signed-url/route.ts` — signed URL for Asset Management agents (bulkheaded).

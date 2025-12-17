@@ -11,19 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import type { FlowStep } from "@/types/flow";
 import type { QuestionKey, TranscriptMessage } from "@/types/interview";
-
-function questionKeyFromStepId(stepId: string): QuestionKey | undefined {
-  const match = stepId.match(/^q(\d)-/);
-  if (!match) return undefined;
-  const num = match[1];
-  if (num === "1") return "q1_attracts";
-  if (num === "2") return "q2_concerns";
-  if (num === "3") return "q3_questions";
-  if (num === "4") return "q4_direct_skills";
-  if (num === "5") return "q5_improve_skills";
-  if (num === "6") return "q6_connect";
-  return undefined;
-}
+import { questionKeyFromStepId } from "@/lib/reflection/question-key";
 
 type StepRendererProps = {
   step: FlowStep;
@@ -38,10 +26,17 @@ type StepRendererProps = {
   onAdvance: () => void;
   onDownloadTranscript?: () => void;
   allMessages?: TranscriptMessage[];
+  signedUrlEndpoint: string;
+  persistState?:
+    | { status: "idle" }
+    | { status: "saving" }
+    | { status: "saved"; id?: string }
+    | { status: "error"; error: string };
+  onRetryPersist?: () => void;
 };
 
-async function requestSignedUrl(agentId: string) {
-  const response = await fetch(`/api/coach/signed-url?agentId=${encodeURIComponent(agentId)}`);
+async function requestSignedUrl(agentId: string, endpoint: string) {
+  const response = await fetch(`${endpoint}?agentId=${encodeURIComponent(agentId)}`);
   if (!response.ok) {
     const body = await response.text().catch(() => response.statusText);
     throw new Error(`Failed to get signed URL (${response.status}): ${body}`);
@@ -79,6 +74,9 @@ export function StepRenderer({
   onAdvance,
   onDownloadTranscript,
   allMessages,
+  signedUrlEndpoint,
+  persistState,
+  onRetryPersist,
 }: StepRendererProps) {
   const [textInput, setTextInput] = useState("");
   const [sendError, setSendError] = useState<string | null>(null);
@@ -133,7 +131,7 @@ export function StepRenderer({
     setIsAwaitingReply(false);
 
     try {
-      const signedUrl = await requestSignedUrl(step.agentId);
+      const signedUrl = await requestSignedUrl(step.agentId, signedUrlEndpoint);
       await conversation.startSession({
         signedUrl,
         connectionType: "websocket",
@@ -147,7 +145,7 @@ export function StepRenderer({
     } finally {
       setIsStarting(false);
     }
-  }, [conversation, step.agentId]);
+  }, [conversation, signedUrlEndpoint, step.agentId]);
 
   const endConversation = useCallback(() => {
     conversation.endSession();
@@ -319,7 +317,7 @@ export function StepRenderer({
           <button onClick={onClear} className="rounded-full border px-4 py-2 text-sm" disabled={messages.length === 0}>
             Clear transcript
           </button>
-          <span>Conversation history is local—keep writing until you feel confident.</span>
+          <span>Conversation history is saved when you finish—keep writing until you feel confident.</span>
         </div>
       </div>
     );
@@ -351,6 +349,22 @@ export function StepRenderer({
           <div>
             <p className="text-2xl font-semibold text-slate-800">Don&apos;t Exit Before Downloading and Saving Your Transcript</p>
             <p className="text-base text-muted-foreground">This conversation contains insights you&apos;ll need as you move forward.</p>
+            {persistState?.status === "saving" && (
+              <p className="mt-2 text-sm text-slate-600">Saving transcript...</p>
+            )}
+            {persistState?.status === "saved" && (
+              <p className="mt-2 text-sm text-emerald-700">Transcript saved.</p>
+            )}
+            {persistState?.status === "error" && (
+              <div className="mt-2 text-sm text-rose-700">
+                <div>Could not save transcript: {persistState.error}</div>
+                {onRetryPersist && (
+                  <button onClick={onRetryPersist} className="mt-2 rounded-full border px-4 py-2 text-sm font-semibold hover:bg-muted">
+                    Retry save
+                  </button>
+                )}
+              </div>
+            )}
           </div>
           <Button
             variant="default"

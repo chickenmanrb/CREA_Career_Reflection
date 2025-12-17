@@ -9,6 +9,7 @@ type LeftNavProps = {
   steps: FlowStep[];
   currentId: string;
   onSelect: (id: string) => void;
+  title: string;
 };
 
 type StepState = "done" | "active" | "upcoming";
@@ -38,7 +39,7 @@ function IconCircle({ state }: { state: StepState }) {
 
   return <span className="h-4 w-4 rounded-full border border-slate-300" />;
 }
-export function LeftNav({ steps, currentId, onSelect }: LeftNavProps) {
+export function LeftNav({ steps, currentId, onSelect, title }: LeftNavProps) {
   const navSteps = useMemo(
     () => steps.filter((step) => step.type === "intro" || step.type === "agent" || step.type === "finish"),
     [steps]
@@ -52,7 +53,9 @@ export function LeftNav({ steps, currentId, onSelect }: LeftNavProps) {
   return (
     <aside className="w-80 bg-[#f9fafb] border-r border-slate-200">
       <div className="px-4 py-4 space-y-2 border-b border-slate-200">
-        <div className="text-sm font-semibold leading-tight text-[#0f1729]">Acquisitions Career Pathway Reflection</div>
+        <div className="text-sm font-semibold leading-tight text-[#0f1729]">
+          {title}
+        </div>
         <div className="text-xs text-muted-foreground">
           {completedQuestions} / {totalQuestions} prompts completed
         </div>
