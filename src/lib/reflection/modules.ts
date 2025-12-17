@@ -1,4 +1,4 @@
-export type ReflectionModuleId = "acquisitions" | "asset-management" | "development";
+export type ReflectionModuleId = "acquisitions" | "asset-management" | "development" | "brokerage";
 
 export type ReflectionModule = {
   id: ReflectionModuleId;
@@ -69,6 +69,26 @@ export const REFLECTION_MODULES: Record<ReflectionModuleId, ReflectionModule> = 
     signedUrlEndpoint: "/api/development/coach/signed-url",
     sessionEndpoint: "/api/development/session",
     agentEnvBase: "NEXT_PUBLIC_DEVELOPMENT_AGENT",
+    fallbackAgentIds: [
+      "agent_9301kb17m8qafjz81fzh3xed32gw",
+      "agent_3001kb17yts2ez6tmp7h6yczfeej",
+      "agent_4101kb18epgrfpd8fthhywkwc5vh",
+      "agent_2101kb18g7gtesyv4319ybbppf6y",
+      "agent_4301kb18hc1mfvz9qwrw5k5acnry",
+      "agent_7001kb18jpckevg876ah1m4472hc",
+    ],
+  },
+  brokerage: {
+    id: "brokerage",
+    slug: "brokerage",
+    exercise: "brokerage",
+    storagePrefix: "brokerage",
+    title: "Brokerage Career Pathway Reflection",
+    transcriptTitle: "Brokerage Career Pathway Reflection Transcript",
+    transcriptFilenamePrefix: "brokerage-reflection-transcript",
+    signedUrlEndpoint: "/api/brokerage/coach/signed-url",
+    sessionEndpoint: "/api/brokerage/session",
+    agentEnvBase: "NEXT_PUBLIC_BROKERAGE_AGENT",
     fallbackAgentIds: [
       "agent_9301kb17m8qafjz81fzh3xed32gw",
       "agent_3001kb17yts2ez6tmp7h6yczfeej",
