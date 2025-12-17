@@ -1,3 +1,5 @@
+import "server-only";
+
 import type { ReflectionModule } from "@/lib/reflection/modules";
 
 function envName(base: string, index: number) {
@@ -14,4 +16,3 @@ export function resolveAgentIds(moduleConfig: Pick<ReflectionModule, "agentEnvBa
   }
   return ids as [string, string, string, string, string, string];
 }
-

@@ -8,10 +8,9 @@ import { StepRenderer } from "@/components/interview/StepRenderer";
 import { LeftNav } from "@/components/layout/LeftNav";
 import { Card, CardContent } from "@/components/ui/card";
 import type { ReflectionModule } from "@/lib/reflection/modules";
-import { resolveAgentIds } from "@/lib/reflection/agents";
-import { buildReflectionFlowConfig } from "@/lib/reflection/flow-config";
 import { questionKeyFromStepId } from "@/lib/reflection/question-key";
 import type { QuestionKey, TranscriptMessage } from "@/types/interview";
+import type { MultiAgentConfig } from "@/types/flow";
 
 const CRE_ANALYST_HOST = "creanalyst.com";
 
@@ -28,9 +27,13 @@ function storageKeys(storagePrefix: string) {
   } as const;
 }
 
-export function ReflectionInterviewClient({ module }: { module: ReflectionModule }) {
-  const agentIds = useMemo(() => resolveAgentIds(module), [module]);
-  const flowConfig = useMemo(() => buildReflectionFlowConfig(agentIds), [agentIds]);
+export function ReflectionInterviewClient({
+  module,
+  flowConfig,
+}: {
+  module: ReflectionModule;
+  flowConfig: MultiAgentConfig;
+}) {
 
   const [messages, setMessages] = useState<TranscriptMessage[]>([]);
   const [currentStepId, setCurrentStepId] = useState<string>(flowConfig.steps[0]?.id ?? "");
@@ -64,7 +67,7 @@ export function ReflectionInterviewClient({ module }: { module: ReflectionModule
 
   const currentStep = useMemo(
     () => flowConfig.steps.find((s) => s.id === currentStepId) ?? flowConfig.steps[0],
-    [currentStepId, flowConfig.steps]
+    [currentStepId, flowConfig]
   );
 
   const messagesForCurrentStep = useMemo(
@@ -103,16 +106,16 @@ export function ReflectionInterviewClient({ module }: { module: ReflectionModule
     anchor.download = `${module.transcriptFilenamePrefix}-${new Date().toISOString().replace(/[:.]/g, "-")}.txt`;
     anchor.click();
     URL.revokeObjectURL(url);
-  }, [flowConfig.steps, messages, module.transcriptFilenamePrefix, module.transcriptTitle]);
+  }, [flowConfig, messages, module.transcriptFilenamePrefix, module.transcriptTitle]);
 
-  const promptSteps = useMemo(() => flowConfig.steps.filter((s) => s.type === "agent"), [flowConfig.steps]);
+  const promptSteps = useMemo(() => flowConfig.steps.filter((s) => s.type === "agent"), [flowConfig]);
   const currentPromptNumber = useMemo(() => {
     const match = currentStepId.match(/^q(\d)-/);
     return match ? Number(match[1]) : null;
   }, [currentStepId]);
   const totalPrompts = promptSteps.length;
 
-  const stepsForNav = useMemo(() => flowConfig.steps, [flowConfig.steps]);
+  const stepsForNav = useMemo(() => flowConfig.steps, [flowConfig]);
   const currentIdx = Math.max(0, stepsForNav.findIndex((s) => s.id === currentStepId));
   const goPrev = () => {
     if (currentIdx > 0) setCurrentStepId(stepsForNav[currentIdx - 1].id);
@@ -226,4 +229,3 @@ export function ReflectionInterviewClient({ module }: { module: ReflectionModule
     </div>
   );
 }
-
