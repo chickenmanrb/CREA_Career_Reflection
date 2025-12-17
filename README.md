@@ -6,6 +6,7 @@ Two parallel exercises with identical UI/UX:
 - Development: `/development`
 - Brokerage: `/brokerage`
 - Lending: `/lending`
+- Consulting: `/consulting`
 
 ## Setup
 1. Install dependencies:
@@ -21,6 +22,7 @@ Two parallel exercises with identical UI/UX:
      - Development: `NEXT_PUBLIC_DEVELOPMENT_AGENT_ID` + `NEXT_PUBLIC_DEVELOPMENT_AGENT_2_ID` ... `_6_ID`
      - Brokerage: `NEXT_PUBLIC_BROKERAGE_AGENT_ID` + `NEXT_PUBLIC_BROKERAGE_AGENT_2_ID` ... `_6_ID`
      - Lending: `NEXT_PUBLIC_LENDING_AGENT_ID` + `NEXT_PUBLIC_LENDING_AGENT_2_ID` ... `_6_ID`
+     - Consulting: `NEXT_PUBLIC_CONSULTING_AGENT_ID` + `NEXT_PUBLIC_CONSULTING_AGENT_2_ID` ... `_6_ID`
 3. Start the dev server:
    ```bash
    npm run dev
