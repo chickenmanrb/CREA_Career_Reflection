@@ -38,7 +38,7 @@ type StepRendererProps = {
   onAdvance: () => void;
   onDownloadTranscript?: () => void;
   allMessages?: TranscriptMessage[];
-  signedUrlEndpoint?: string;
+  signedUrlEndpoint: string;
   persistState?:
     | { status: "idle" }
     | { status: "saving" }
@@ -143,8 +143,7 @@ export function StepRenderer({
     setIsAwaitingReply(false);
 
     try {
-      const endpoint = signedUrlEndpoint ?? "/api/coach/signed-url";
-      const signedUrl = await requestSignedUrl(step.agentId, endpoint);
+      const signedUrl = await requestSignedUrl(step.agentId, signedUrlEndpoint);
       await conversation.startSession({
         signedUrl,
         connectionType: "websocket",

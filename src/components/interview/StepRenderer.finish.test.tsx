@@ -41,6 +41,7 @@ describe("StepRenderer finish", () => {
         onClear={() => {}}
         onAdvance={() => {}}
         onDownloadTranscript={() => {}}
+        signedUrlEndpoint="/api/test/signed-url"
       />
     );
 

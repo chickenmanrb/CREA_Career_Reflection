@@ -9,7 +9,7 @@ type LeftNavProps = {
   steps: FlowStep[];
   currentId: string;
   onSelect: (id: string) => void;
-  title?: string;
+  title: string;
 };
 
 type StepState = "done" | "active" | "upcoming";
@@ -54,7 +54,7 @@ export function LeftNav({ steps, currentId, onSelect, title }: LeftNavProps) {
     <aside className="w-80 bg-[#f9fafb] border-r border-slate-200">
       <div className="px-4 py-4 space-y-2 border-b border-slate-200">
         <div className="text-sm font-semibold leading-tight text-[#0f1729]">
-          {title ?? "Acquisitions Career Pathway Reflection"}
+          {title}
         </div>
         <div className="text-xs text-muted-foreground">
           {completedQuestions} / {totalQuestions} prompts completed
