@@ -16,6 +16,9 @@ describe("reflection modules registry", () => {
   it("resolves modules by slug", () => {
     const moduleConfig = getReflectionModuleBySlug("capital-markets-brokerage");
     expect(moduleConfig?.id).toBe("brokerage");
+
+    const leasing = getReflectionModuleBySlug("leasing-brokerage");
+    expect(leasing?.id).toBe("leasing-brokerage");
   });
 
   it("keeps endpoints consistent with module slug", () => {

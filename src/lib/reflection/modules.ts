@@ -3,6 +3,7 @@ export type ReflectionModuleId =
   | "asset-management"
   | "development"
   | "brokerage"
+  | "leasing-brokerage"
   | "lending"
   | "consulting";
 
@@ -96,6 +97,26 @@ export const REFLECTION_MODULES: Record<ReflectionModuleId, ReflectionModule> = 
     sessionEndpoint: "/api/capital-markets-brokerage/session",
     agentEnvBase: "NEXT_PUBLIC_CAPITAL_MARKETS_BROKERAGE_AGENT",
     legacyAgentEnvBase: "NEXT_PUBLIC_BROKERAGE_AGENT",
+    fallbackAgentIds: [
+      "agent_9301kb17m8qafjz81fzh3xed32gw",
+      "agent_3001kb17yts2ez6tmp7h6yczfeej",
+      "agent_4101kb18epgrfpd8fthhywkwc5vh",
+      "agent_2101kb18g7gtesyv4319ybbppf6y",
+      "agent_4301kb18hc1mfvz9qwrw5k5acnry",
+      "agent_7001kb18jpckevg876ah1m4472hc",
+    ],
+  },
+  "leasing-brokerage": {
+    id: "leasing-brokerage",
+    slug: "leasing-brokerage",
+    exercise: "leasing_brokerage",
+    storagePrefix: "leasing_brokerage",
+    title: "Leasing Brokerage Career Pathway Reflection",
+    transcriptTitle: "Leasing Brokerage Career Pathway Reflection Transcript",
+    transcriptFilenamePrefix: "leasing-brokerage-reflection-transcript",
+    signedUrlEndpoint: "/api/leasing-brokerage/coach/signed-url",
+    sessionEndpoint: "/api/leasing-brokerage/session",
+    agentEnvBase: "NEXT_PUBLIC_LEASING_BROKERAGE_AGENT",
     fallbackAgentIds: [
       "agent_9301kb17m8qafjz81fzh3xed32gw",
       "agent_3001kb17yts2ez6tmp7h6yczfeej",
