@@ -4,7 +4,7 @@ Two parallel exercises with identical UI/UX:
 - Acquisitions: `/acquisitions`
 - Asset Management: `/asset-management`
 - Development: `/development`
-- Brokerage: `/brokerage`
+- Capital Markets Brokerage: `/capital-markets-brokerage` (legacy: `/brokerage` redirects)
 - Lending: `/lending`
 - Consulting: `/consulting`
 
@@ -20,7 +20,7 @@ Two parallel exercises with identical UI/UX:
      - Acquisitions: `NEXT_PUBLIC_ACQUISITION_AGENT_ID` + `NEXT_PUBLIC_ACQUISITION_AGENT_2_ID` ... `_6_ID`
      - Asset Management: `NEXT_PUBLIC_ASSET_MANAGEMENT_AGENT_ID` + `NEXT_PUBLIC_ASSET_MANAGEMENT_AGENT_2_ID` ... `_6_ID`
      - Development: `NEXT_PUBLIC_DEVELOPMENT_AGENT_ID` + `NEXT_PUBLIC_DEVELOPMENT_AGENT_2_ID` ... `_6_ID`
-     - Brokerage: `NEXT_PUBLIC_BROKERAGE_AGENT_ID` + `NEXT_PUBLIC_BROKERAGE_AGENT_2_ID` ... `_6_ID`
+     - Capital Markets Brokerage: `NEXT_PUBLIC_BROKERAGE_AGENT_ID` + `NEXT_PUBLIC_BROKERAGE_AGENT_2_ID` ... `_6_ID`
      - Lending: `NEXT_PUBLIC_LENDING_AGENT_ID` + `NEXT_PUBLIC_LENDING_AGENT_2_ID` ... `_6_ID`
      - Consulting: `NEXT_PUBLIC_CONSULTING_AGENT_ID` + `NEXT_PUBLIC_CONSULTING_AGENT_2_ID` ... `_6_ID`
 3. Start the dev server:
