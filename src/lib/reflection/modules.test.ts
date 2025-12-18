@@ -10,6 +10,7 @@ describe("reflection modules registry", () => {
     expect(moduleConfig.transcriptTitle).toContain("Capital Markets Brokerage");
     expect(moduleConfig.signedUrlEndpoint).toBe("/api/capital-markets-brokerage/coach/signed-url");
     expect(moduleConfig.sessionEndpoint).toBe("/api/capital-markets-brokerage/session");
+    expect(moduleConfig.agentEnvBase).toBe("NEXT_PUBLIC_CAPITAL_MARKETS_BROKERAGE_AGENT");
   });
 
   it("resolves modules by slug", () => {
@@ -28,4 +29,3 @@ describe("reflection modules registry", () => {
     }
   });
 });
-

@@ -13,11 +13,12 @@
   {
     "id": "rename-brokerage-to-capital-markets-brokerage",
     "title": "Rename Brokerage module to Capital Markets Brokerage",
-    "description": "Rename the Brokerage reflection module’s user-facing copy and URL, update module registry endpoints, and keep legacy /brokerage working via redirects and API alias routes.",
+    "description": "Rename the Brokerage reflection module’s user-facing copy and URL, update module registry endpoints, and rename Brokerage agent env vars to NEXT_PUBLIC_CAPITAL_MARKETS_BROKERAGE_AGENT_* (with legacy fallback).",
     "passes": true,
     "verified": {
       "date": "2025-12-18",
       "commands": ["npm run lint", "npm test", "npm run build"]
-    }
+    },
+    "notes": "Netlify env vars migrated from NEXT_PUBLIC_BROKERAGE_AGENT_* to NEXT_PUBLIC_CAPITAL_MARKETS_BROKERAGE_AGENT_*."
   }
 ]

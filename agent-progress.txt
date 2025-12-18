@@ -28,3 +28,4 @@
 2025-12-17: Updated Next.js/React and Netlify Next.js plugin to satisfy Netlify deploy blocks for CVE-2025-55182.
 2025-12-17: Added REFLECTION_AGENT_IDS_JSON support to reduce Netlify/AWS Lambda env var size pressure while keeping per-module agent allowlisting.
 2025-12-18: Renamed the Brokerage reflection module to Capital Markets Brokerage, moved the canonical URL to /capital-markets-brokerage, and added redirects + API endpoints to keep /brokerage working.
+2025-12-18: Renamed Brokerage agent env vars to NEXT_PUBLIC_CAPITAL_MARKETS_BROKERAGE_AGENT_* and added a legacy env fallback to avoid breaking existing setups.

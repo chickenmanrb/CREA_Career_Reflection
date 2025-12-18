@@ -94,7 +94,8 @@ export const REFLECTION_MODULES: Record<ReflectionModuleId, ReflectionModule> = 
     transcriptFilenamePrefix: "capital-markets-brokerage-reflection-transcript",
     signedUrlEndpoint: "/api/capital-markets-brokerage/coach/signed-url",
     sessionEndpoint: "/api/capital-markets-brokerage/session",
-    agentEnvBase: "NEXT_PUBLIC_BROKERAGE_AGENT",
+    agentEnvBase: "NEXT_PUBLIC_CAPITAL_MARKETS_BROKERAGE_AGENT",
+    legacyAgentEnvBase: "NEXT_PUBLIC_BROKERAGE_AGENT",
     fallbackAgentIds: [
       "agent_9301kb17m8qafjz81fzh3xed32gw",
       "agent_3001kb17yts2ez6tmp7h6yczfeej",
