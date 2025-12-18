@@ -9,5 +9,26 @@
       "commands": ["npm run lint", "npm test", "npm run build"]
     },
     "notes": "Supabase project unpaused; reflection_sessions now includes required exercise column with default 'acquisitions'."
+  },
+  {
+    "id": "rename-brokerage-to-capital-markets-brokerage",
+    "title": "Rename Brokerage module to Capital Markets Brokerage",
+    "description": "Rename the Brokerage reflection module’s user-facing copy and URL, update module registry endpoints, and rename Brokerage agent env vars to NEXT_PUBLIC_CAPITAL_MARKETS_BROKERAGE_AGENT_* (with legacy fallback).",
+    "passes": true,
+    "verified": {
+      "date": "2025-12-18",
+      "commands": ["npm run lint", "npm test", "npm run build"]
+    },
+    "notes": "Netlify env vars migrated from NEXT_PUBLIC_BROKERAGE_AGENT_* to NEXT_PUBLIC_CAPITAL_MARKETS_BROKERAGE_AGENT_*."
+  },
+  {
+    "id": "add-leasing-brokerage-module",
+    "title": "Add Leasing Brokerage reflection module",
+    "description": "Add a new parallel reflection module at /leasing-brokerage with its own module-scoped API routes and env-var base for agent IDs, segmented persistence via reflection_sessions.exercise.",
+    "passes": true,
+    "verified": {
+      "date": "2025-12-18",
+      "commands": ["npm run lint", "npm test", "npm run build"]
+    }
   }
 ]

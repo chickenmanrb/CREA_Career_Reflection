@@ -14,7 +14,7 @@
 
 ## Build, Test, and Development Commands
 - Install once: `npm install`.
-- Develop: `npm run dev` (http://localhost:3000, start via `/acquisitions`, `/asset-management`, `/development`, `/brokerage`, `/lending`, `/consulting`).
+- Develop: `npm run dev` (http://localhost:3000, start via `/acquisitions`, `/asset-management`, `/development`, `/capital-markets-brokerage`, `/leasing-brokerage`, `/lending`, `/consulting`).
 - Production build: `npm run build`; serve locally with `npm start`.
 - Lint: `npm run lint` (Next core-web-vitals + TypeScript rules).
 - Tests: `npm test` (vitest, non-interactive).
